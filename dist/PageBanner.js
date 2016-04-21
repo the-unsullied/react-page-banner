@@ -67,8 +67,6 @@ exports.default = _react2.default.createClass({
     this.setState({ height: height });
 
     if (topOffset) {
-      // const banner = this.refs.pageBanner;
-      // banner.style.top = topOffset;
       document.querySelector('style').textContent += '.page-banner { top: ' + topOffset + ' }';
     }
     if (topPalmOffset) {
