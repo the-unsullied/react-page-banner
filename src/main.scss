@@ -1,0 +1,103 @@
+@import './node_modules/inuit-responsive-settings/settings.responsive';
+@import './node_modules/inuit-responsive-tools/tools.responsive';
+@import 'icons';
+@mixin vendor($prop, $val) {
+  -webkit-#{$prop}: #{$val};
+  -ms-#{$prop}: #{$val};
+  -moz-#{$prop}: #{$val};
+  -o-#{$prop}: #{$val};
+  #{$prop}: #{$val};
+}
+
+$is-iframed:                 false         !default;
+$header-height:             70px          !default;
+$header-height-palm:        50px          !default;
+$page-banner-height:        70px          !default;
+$page-banner-success-bg:    #8CC237       !default;
+$page-banner-success-color: white         !default;
+$page-banner-warning-bg:    #f9f1c5       !default;
+$page-banner-warning-color: #71562e       !default;
+$page-banner-error-bg:      #ea4858       !default;
+$page-banner-error-color:   white         !default;
+$message-success-color:     white         !default;
+
+.page-banner {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  z-index: 1;
+  overflow: hidden;
+  font-size: 1rem;
+  @if $is-iframed == false {
+    top: $header-height;
+    @include media-query(palm) {
+      top: $header-height-palm;
+    }
+  } @else {
+    top: 0;
+  }
+  @include media-query(palm) {
+    text-align: left;
+  }
+}
+
+.page-banner__body {
+  text-align: center;
+  position: relative;
+  padding: 15px 50px;
+  @include vendor(transition, top 300 ease);
+  will-change: top;
+}
+
+.page-banner__shim {
+  height: 0;
+  @include vendor(transition, height 300 ease);
+}
+
+.page-banner__body--showing {
+  top: 0 !important;
+}
+
+.page-banner__close {
+  position: absolute;
+  right: 24px;
+  top: 11px;
+  opacity: 0.7;
+  cursor: pointer;
+  font-size: 24px;
+  &:hover {
+    opacity: 1;
+  }
+  @include media-query(palm) {
+    right: 10px;
+    top: 4px;
+  }
+}
+
+.page-banner--fixed {
+  position: fixed;
+  @include vendor(transform, translateZ(1px));
+  top: 0;
+}
+
+.page-banner--success {
+  .page-banner__body {
+    background: $page-banner-success-bg;
+    color: $message-success-color;
+  }
+}
+
+.page-banner--warning {
+  .page-banner__body {
+    background-color: $page-banner-warning-bg;
+    color: $page-banner-warning-color;
+  }
+}
+
+.page-banner--error {
+  .page-banner__body {
+    background-color: $page-banner-error-bg;
+    color: $page-banner-error-color;
+  }
+}

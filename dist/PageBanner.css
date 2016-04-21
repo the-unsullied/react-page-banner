@@ -1,0 +1,94 @@
+@font-face {
+  font-family: 'points-icons';
+  src: url("./fonts/fonts/points-icons.ttf?wwgb2e") format("truetype"), url("./fonts/fonts/points-icons.woff?wwgb2e") format("woff"), url("./fonts/fonts/points-icons.svg?wwgb2e#points-icons") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'points-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-close:before {
+  content: "\e61c"; }
+
+.page-banner {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  text-align: center;
+  z-index: 1;
+  overflow: hidden;
+  font-size: 1rem;
+  top: 70px; }
+  @media screen and (max-width: 44.9375em) {
+    .page-banner {
+      top: 50px; } }
+  @media screen and (max-width: 44.9375em) {
+    .page-banner {
+      text-align: left; } }
+
+.page-banner__body {
+  text-align: center;
+  position: relative;
+  padding: 15px 50px;
+  -webkit-transition: top 300 ease;
+  -ms-transition: top 300 ease;
+  -moz-transition: top 300 ease;
+  -o-transition: top 300 ease;
+  transition: top 300 ease;
+  will-change: top; }
+
+.page-banner__shim {
+  height: 0;
+  -webkit-transition: height 300 ease;
+  -ms-transition: height 300 ease;
+  -moz-transition: height 300 ease;
+  -o-transition: height 300 ease;
+  transition: height 300 ease; }
+
+.page-banner__body--showing {
+  top: 0 !important; }
+
+.page-banner__close {
+  position: absolute;
+  right: 24px;
+  top: 11px;
+  opacity: 0.7;
+  cursor: pointer;
+  font-size: 24px; }
+  .page-banner__close:hover {
+    opacity: 1; }
+  @media screen and (max-width: 44.9375em) {
+    .page-banner__close {
+      right: 10px;
+      top: 4px; } }
+
+.page-banner--fixed {
+  position: fixed;
+  -webkit-transform: translateZ(1px);
+  -ms-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+  -o-transform: translateZ(1px);
+  transform: translateZ(1px);
+  top: 0; }
+
+.page-banner--success .page-banner__body {
+  background: #8CC237;
+  color: white; }
+
+.page-banner--warning .page-banner__body {
+  background-color: #f9f1c5;
+  color: #71562e; }
+
+.page-banner--error .page-banner__body {
+  background-color: #ea4858;
+  color: white; }
