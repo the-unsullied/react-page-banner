@@ -28,7 +28,7 @@
 	],
 	"height": 1024,
 	"metadata": {
-		"name": "points-icons"
+		"name": "page-banner-icons"
 	},
 	"preferences": {
 		"showGlyphs": true,
@@ -38,7 +38,7 @@
 		"fontPref": {
 			"prefix": "icon-",
 			"metadata": {
-				"fontFamily": "points-icons",
+				"fontFamily": "page-banner-icons",
 				"majorVersion": 1,
 				"minorVersion": 0
 			},

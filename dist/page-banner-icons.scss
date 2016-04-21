@@ -1,16 +1,16 @@
 @font-face {
-    font-family: 'points-icons';
+    font-family: 'page-banner-icons';
     src:
-        url('./fonts/fonts/points-icons.ttf?wwgb2e') format('truetype'),
-        url('./fonts/fonts/points-icons.woff?wwgb2e') format('woff'),
-        url('./fonts/fonts/points-icons.svg?wwgb2e#points-icons') format('svg');
+        url('./../fonts/fonts/page-banner-icons.ttf?wwgb2e') format('truetype'),
+        url('./../fonts/fonts/page-banner-icons.woff?wwgb2e') format('woff'),
+        url('./../fonts/fonts/page-banner-icons.svg?wwgb2e#page-banner-icons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'points-icons' !important;
+    font-family: 'page-banner-icons' !important;
     speak: none;
     font-style: normal;
     font-weight: normal;

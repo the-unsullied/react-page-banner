@@ -32,8 +32,10 @@ exports.default = _react2.default.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 5000,
-      afterClose: function afterClose() {}
+      duration: 95000,
+      afterClose: function afterClose() {},
+      topOffset: '0px',
+      topPalmOffset: '0px'
     };
   },
 
@@ -41,7 +43,9 @@ exports.default = _react2.default.createClass({
     message: _react2.default.PropTypes.string,
     type: _react2.default.PropTypes.string,
     duration: _react2.default.PropTypes.number,
-    afterClose: _react2.default.PropTypes.func
+    afterClose: _react2.default.PropTypes.func,
+    topOffset: _react2.default.PropTypes.string,
+    topPalmOffset: _react2.default.PropTypes.string
   },
 
   getInitialState: function getInitialState() {
@@ -55,10 +59,21 @@ exports.default = _react2.default.createClass({
   componentDidMount: function componentDidMount() {
     //set the height of the banner to animate in and out correctly
     var el = this.refs.pageBannerBody;
+    var topOffset = this.props.topOffset;
+    var topPalmOffset = this.props.topPalmOffset;
     var height = el.clientHeight;
     el.style.top = -height + 'px';
 
     this.setState({ height: height });
+
+    if (topOffset) {
+      var banner = this.refs.pageBanner;
+      banner.style.top = topOffset;
+    }
+    if (topPalmOffset) {
+      var _banner = this.refs.pageBanner;
+      _banner.style.textContent += '@media screen and (max-width: 525px) { .page-banner { top: ' + topPalmOffset + ' } }';
+    }
 
     waypoint = new Waypoint({
       element: this.refs.pageBanner,
@@ -108,7 +123,7 @@ exports.default = _react2.default.createClass({
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
 
-    var type = this.props.type || 'success';
+    var type = this.props.type;
     var customMessage = this.props.customMessage;
 
     return _react2.default.createElement(

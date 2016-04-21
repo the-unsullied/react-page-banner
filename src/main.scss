@@ -1,15 +1,12 @@
-@import './node_modules/inuit-responsive-settings/settings.responsive';
-@import './node_modules/inuit-responsive-tools/tools.responsive';
-@import 'icons';
-@mixin vendor($prop, $val) {
-  -webkit-#{$prop}: #{$val};
-  -ms-#{$prop}: #{$val};
-  -moz-#{$prop}: #{$val};
-  -o-#{$prop}: #{$val};
-  #{$prop}: #{$val};
-}
-
-$is-iframed:                 false         !default;
+$page-banner-breakpoints: (
+    "palm"          "screen and (max-width: 525px)",
+    "lap"           "screen and (min-width: 526px) and (max-width: 768px)",
+    "lap-and-up"    "screen and (min-width: 769px)",
+    "portable"      "screen and (max-width: 768px)",
+    "desk"          "screen and (min-width: 769px)",
+    "retina"        "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
+) !default;
+$has-offset-top:            false         !default;
 $header-height:             70px          !default;
 $header-height-palm:        50px          !default;
 $page-banner-height:        70px          !default;
@@ -21,6 +18,48 @@ $page-banner-error-bg:      #ea4858       !default;
 $page-banner-error-color:   white         !default;
 $message-success-color:     white         !default;
 
+@mixin page-banner-vendor($prop, $val) {
+  -webkit-#{$prop}: #{$val};
+  -ms-#{$prop}: #{$val};
+  -moz-#{$prop}: #{$val};
+  -o-#{$prop}: #{$val};
+  #{$prop}: #{$val};
+}
+
+@mixin page-banner-media-query($mq) {
+
+    $breakpoint-found: false;
+
+    // Loop through the list of breakpoints we’ve provided in our settings file.
+    @each $breakpoint in $page-banner-breakpoints {
+
+        // Grab the alias and the condition from their respective locations in
+        // the list.
+        $alias:     nth($breakpoint, 1);
+        $condition: nth($breakpoint, 2);
+
+        // If the media query we’ve specified has an alias and a condition...
+        @if $mq == $alias and $condition {
+
+            // ...tell the mixin that we’ve found it...
+            $breakpoint-found: true;
+
+            // ...and spit it out here.
+            @media #{$condition} {
+                @content;
+            }
+
+        }
+
+    }
+
+    // If the user specifies a non-exitent alias, send them a warning.
+    @if $breakpoint-found == false{
+        @warn "Oops! Breakpoint ‘#{$mq}’ does not exist."
+    }
+
+}
+
 .page-banner {
   position: absolute;
   width: 100%;
@@ -29,15 +68,9 @@ $message-success-color:     white         !default;
   z-index: 1;
   overflow: hidden;
   font-size: 1rem;
-  @if $is-iframed == false {
-    top: $header-height;
-    @include media-query(palm) {
-      top: $header-height-palm;
-    }
-  } @else {
-    top: 0;
-  }
-  @include media-query(palm) {
+
+  top: 0;
+  @include page-banner-media-query(palm) {
     text-align: left;
   }
 }
@@ -46,13 +79,13 @@ $message-success-color:     white         !default;
   text-align: center;
   position: relative;
   padding: 15px 50px;
-  @include vendor(transition, top 300 ease);
+  @include page-banner-vendor(transition, top 300ms ease);
   will-change: top;
 }
 
 .page-banner__shim {
   height: 0;
-  @include vendor(transition, height 300 ease);
+  @include page-banner-vendor(transition, height 300ms ease);
 }
 
 .page-banner__body--showing {
@@ -69,7 +102,7 @@ $message-success-color:     white         !default;
   &:hover {
     opacity: 1;
   }
-  @include media-query(palm) {
+  @include page-banner-media-query(palm) {
     right: 10px;
     top: 4px;
   }
@@ -77,8 +110,8 @@ $message-success-color:     white         !default;
 
 .page-banner--fixed {
   position: fixed;
-  @include vendor(transform, translateZ(1px));
-  top: 0;
+  @include page-banner-vendor(transform, translateZ(1px));
+  top: 0 !important;
 }
 
 .page-banner--success {

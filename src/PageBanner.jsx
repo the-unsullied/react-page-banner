@@ -15,8 +15,10 @@ export default React.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 5000,
-      afterClose: () => {}
+      duration: 95000,
+      afterClose: () => {},
+      topOffset: '0px',
+      topPalmOffset: '0px'
     };
   },
 
@@ -24,7 +26,9 @@ export default React.createClass({
     message: React.PropTypes.string,
     type: React.PropTypes.string,
     duration: React.PropTypes.number,
-    afterClose: React.PropTypes.func
+    afterClose: React.PropTypes.func,
+    topOffset: React.PropTypes.string,
+    topPalmOffset: React.PropTypes.string
   },
 
   getInitialState() {
@@ -39,10 +43,21 @@ export default React.createClass({
   componentDidMount() {
     //set the height of the banner to animate in and out correctly
     const el = this.refs.pageBannerBody;
+    const topOffset = this.props.topOffset;
+    const topPalmOffset = this.props.topPalmOffset;
     var height = el.clientHeight;
     el.style.top = `${-(height)}px`;
 
     this.setState({ height });
+
+    if(topOffset) {
+      const banner = this.refs.pageBanner;
+      banner.style.top = topOffset;
+    }
+    if(topPalmOffset) {
+      const banner = this.refs.pageBanner;
+      banner.style.textContent += `@media screen and (max-width: 525px) { .page-banner { top: ${topPalmOffset} } }`;
+    }
 
     waypoint = new Waypoint({
       element: this.refs.pageBanner,
@@ -91,7 +106,7 @@ export default React.createClass({
 
   render() {
     const { isFixed, isShowing } = this.state;
-    const type = this.props.type || 'success';
+    const type = this.props.type;
     const { customMessage } = this.props;
     return <div>
       <div ref="pageBanner" className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed})}>
