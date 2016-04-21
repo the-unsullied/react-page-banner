@@ -51,12 +51,10 @@ export default React.createClass({
     this.setState({ height });
 
     if(topOffset) {
-      const banner = this.refs.pageBanner;
-      banner.style.top = topOffset;
+      document.querySelector('style').textContent += `.page-banner { top: ${topOffset} }`;
     }
     if(topPalmOffset) {
-      const banner = this.refs.pageBanner;
-      banner.style.textContent += `@media screen and (max-width: 525px) { .page-banner { top: ${topPalmOffset} } }`;
+      document.querySelector('style').textContent += `@media screen and (max-width: 525px) { .page-banner { top: ${topPalmOffset} } }`;
     }
 
     waypoint = new Waypoint({

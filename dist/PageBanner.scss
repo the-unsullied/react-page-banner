@@ -69,14 +69,7 @@ $message-success-color:     white         !default;
   overflow: hidden;
   font-size: 1rem;
 
-  // @if $has-offset-top == false {
-  //   top: $header-height;
-  //   @include page-banner-media-query(palm) {
-  //     top: $header-height-palm;
-  //   }
-  // } @else {
   top: 0;
-  // }
   @include page-banner-media-query(palm) {
     text-align: left;
   }

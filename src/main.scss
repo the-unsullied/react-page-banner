@@ -6,17 +6,12 @@ $page-banner-breakpoints: (
     "desk"          "screen and (min-width: 769px)",
     "retina"        "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
 ) !default;
-$has-offset-top:            false         !default;
-$header-height:             70px          !default;
-$header-height-palm:        50px          !default;
-$page-banner-height:        70px          !default;
-$page-banner-success-bg:    #8CC237       !default;
-$page-banner-success-color: white         !default;
-$page-banner-warning-bg:    #f9f1c5       !default;
-$page-banner-warning-color: #71562e       !default;
-$page-banner-error-bg:      #ea4858       !default;
-$page-banner-error-color:   white         !default;
-$message-success-color:     white         !default;
+$page-banner-success-bg:                #8CC237       !default;
+$page-banner-warning-bg:                #f9f1c5       !default;
+$page-banner-warning-color:             #71562e       !default;
+$page-banner-error-bg:                  #ea4858       !default;
+$page-banner-error-color:               white         !default;
+$page-banner-message-success-color:     white         !default;
 
 @mixin page-banner-vendor($prop, $val) {
   -webkit-#{$prop}: #{$val};
@@ -117,7 +112,7 @@ $message-success-color:     white         !default;
 .page-banner--success {
   .page-banner__body {
     background: $page-banner-success-bg;
-    color: $message-success-color;
+    color: $page-banner-message-success-color;
   }
 }
 

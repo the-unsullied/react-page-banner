@@ -67,12 +67,12 @@ exports.default = _react2.default.createClass({
     this.setState({ height: height });
 
     if (topOffset) {
-      var banner = this.refs.pageBanner;
-      banner.style.top = topOffset;
+      // const banner = this.refs.pageBanner;
+      // banner.style.top = topOffset;
+      document.querySelector('style').textContent += '.page-banner { top: ' + topOffset + ' }';
     }
     if (topPalmOffset) {
-      var _banner = this.refs.pageBanner;
-      _banner.style.textContent += '@media screen and (max-width: 525px) { .page-banner { top: ' + topPalmOffset + ' } }';
+      document.querySelector('style').textContent += '@media screen and (max-width: 525px) { .page-banner { top: ' + topPalmOffset + ' } }';
     }
 
     waypoint = new Waypoint({
