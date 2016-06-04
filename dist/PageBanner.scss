@@ -103,6 +103,13 @@ $page-banner-message-success-color:     white         !default;
   }
 }
 
+.page-banner__icon-close {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-repeat: no-repeat;
+}
+
 .page-banner--fixed {
   position: fixed;
   @include page-banner-vendor(transform, translateZ(1px));

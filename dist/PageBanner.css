@@ -47,6 +47,12 @@
       right: 10px;
       top: 4px; } }
 
+.page-banner__icon-close {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background-repeat: no-repeat; }
+
 .page-banner--fixed {
   position: fixed;
   -webkit-transform: translateZ(1px);

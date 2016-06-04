@@ -4,8 +4,7 @@ to set shim, make sure that <PageBanner /> is at the top of your page.
 */
 import React from 'react';
 import classnames from 'classnames';
-import 'waypoints';
-import { FormattedHTMLMessage } from 'react-intl';
+import './waypoints';
 
 let waypoint;
 
@@ -104,17 +103,14 @@ export default React.createClass({
 
   render() {
     const { isFixed, isShowing } = this.state;
-    const type = this.props.type;
-    const { customMessage } = this.props;
+    const { message, type } = this.props;
     return <div>
       <div ref="pageBanner" className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed})}>
         <div ref="pageBannerBody" className={classnames("page-banner__body", {'page-banner__body--showing': isShowing})}>
           <div className="page-banner__close">
-            <i className="icon-close" onClick={this._close} />
+            <i className="page-banner__icon-close" onClick={this._close} />
           </div>
-          {
-            customMessage ? customMessage : <FormattedHTMLMessage id={this.props.message} values={this.props.translationValues} />
-          }
+          { message }
         </div>
       </div>
       <div ref="pageBannerShim" className="page-banner__shim"></div>

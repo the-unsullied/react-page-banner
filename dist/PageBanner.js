@@ -12,19 +12,15 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-require('waypoints');
-
-var _reactIntl = require('react-intl');
+require('./waypoints');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
-@class PageBanner
-to set shim, make sure that <PageBanner /> is at the top of your page.
-*/
+var waypoint = void 0; /**
+                       @class PageBanner
+                       to set shim, make sure that <PageBanner /> is at the top of your page.
+                       */
 
-
-var waypoint = void 0;
 
 exports.default = _react2.default.createClass({
 
@@ -120,9 +116,9 @@ exports.default = _react2.default.createClass({
     var _state = this.state;
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
-
-    var type = this.props.type;
-    var customMessage = this.props.customMessage;
+    var _props = this.props;
+    var message = _props.message;
+    var type = _props.type;
 
     return _react2.default.createElement(
       'div',
@@ -136,9 +132,9 @@ exports.default = _react2.default.createClass({
           _react2.default.createElement(
             'div',
             { className: 'page-banner__close' },
-            _react2.default.createElement('i', { className: 'icon-close', onClick: this._close })
+            _react2.default.createElement('i', { className: 'page-banner__icon-close', onClick: this._close })
           ),
-          customMessage ? customMessage : _react2.default.createElement(_reactIntl.FormattedHTMLMessage, { id: this.props.message, values: this.props.translationValues })
+          message
         )
       ),
       _react2.default.createElement('div', { ref: 'pageBannerShim', className: 'page-banner__shim' })

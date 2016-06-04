@@ -32,3 +32,11 @@ To optionally change any of these colors, place the scss variable above the impo
 **$page-banner-error-color** - message color for *error* type page banner
 
 **$page-banner-message-success-color** - message color for *success* type page banner
+
+NOTE: For close button you must copy svg image in `dist/page-banner-close.svg` into your own images directory, and implement the class:
+```
+.page-banner__icon-close {
+  background-image: url('/path/to/page-banner-icons.svg');
+}
+
+```
