@@ -31,7 +31,8 @@ exports.default = _react2.default.createClass({
       duration: 95000,
       afterClose: function afterClose() {},
       topOffset: '0px',
-      topPalmOffset: '0px'
+      topPalmOffset: '0px',
+      hideShim: false
     };
   },
 
@@ -41,7 +42,8 @@ exports.default = _react2.default.createClass({
     duration: _react2.default.PropTypes.number,
     afterClose: _react2.default.PropTypes.func,
     topOffset: _react2.default.PropTypes.string,
-    topPalmOffset: _react2.default.PropTypes.string
+    topPalmOffset: _react2.default.PropTypes.string,
+    hideShim: _react2.default.PropTypes.bool
   },
 
   getInitialState: function getInitialState() {
@@ -88,15 +90,23 @@ exports.default = _react2.default.createClass({
   },
   _toggleIsShowing: function _toggleIsShowing() {
     var isShowing = !this.state.isShowing;
-    var duration = this.props.duration;
+    var _props = this.props;
+    var duration = _props.duration;
+    var hideShim = _props.hideShim;
 
     this.setState({ isShowing: isShowing });
     if (isShowing) {
       if (duration) {
         this.setState({ closePageBannerTimer: setTimeout(this._close, duration) });
       }
+      if (hideShim) {
+        return;
+      }
       this.refs.pageBannerShim.style.height = this.state.height + 'px';
     } else {
+      if (hideShim) {
+        return;
+      }
       this.refs.pageBannerShim.style.height = '0px';
     }
   },
@@ -116,9 +126,10 @@ exports.default = _react2.default.createClass({
     var _state = this.state;
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
-    var _props = this.props;
-    var message = _props.message;
-    var type = _props.type;
+    var _props2 = this.props;
+    var message = _props2.message;
+    var type = _props2.type;
+    var hideShim = _props2.hideShim;
 
     return _react2.default.createElement(
       'div',
@@ -137,7 +148,7 @@ exports.default = _react2.default.createClass({
           message
         )
       ),
-      _react2.default.createElement('div', { ref: 'pageBannerShim', className: 'page-banner__shim' })
+      hideShim ? null : _react2.default.createElement('div', { ref: 'pageBannerShim', className: 'page-banner__shim' })
     );
   }
 });

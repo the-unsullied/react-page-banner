@@ -17,7 +17,8 @@ export default React.createClass({
       duration: 95000,
       afterClose: () => {},
       topOffset: '0px',
-      topPalmOffset: '0px'
+      topPalmOffset: '0px',
+      hideShim: false
     };
   },
 
@@ -27,7 +28,8 @@ export default React.createClass({
     duration: React.PropTypes.number,
     afterClose: React.PropTypes.func,
     topOffset: React.PropTypes.string,
-    topPalmOffset: React.PropTypes.string
+    topPalmOffset: React.PropTypes.string,
+    hideShim: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -78,14 +80,16 @@ export default React.createClass({
 
   _toggleIsShowing() {
     const isShowing = !this.state.isShowing;
-    const { duration } = this.props;
+    const { duration, hideShim } = this.props;
     this.setState({ isShowing });
     if(isShowing) {
       if(duration) {
         this.setState({closePageBannerTimer: setTimeout(this._close, duration)});
       }
+      if(hideShim) { return; }
       this.refs.pageBannerShim.style.height = `${this.state.height}px`;
     } else {
+      if(hideShim) { return; }
       this.refs.pageBannerShim.style.height = `0px`;
     }
   },
@@ -103,7 +107,7 @@ export default React.createClass({
 
   render() {
     const { isFixed, isShowing } = this.state;
-    const { message, type } = this.props;
+    const { message, type, hideShim } = this.props;
     return <div>
       <div ref="pageBanner" className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed})}>
         <div ref="pageBannerBody" className={classnames("page-banner__body", {'page-banner__body--showing': isShowing})}>
@@ -113,7 +117,7 @@ export default React.createClass({
           { message }
         </div>
       </div>
-      <div ref="pageBannerShim" className="page-banner__shim"></div>
+      { hideShim ? null : <div ref="pageBannerShim" className="page-banner__shim"></div> }
     </div>
   }
 });
