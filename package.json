@@ -1,6 +1,6 @@
 {
   "name": "react-page-banner",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "A notification banner that absolutedly slides below parent element.",
   "main": "./dist/PageBanner.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/the-unsullied/react-page-banner"
   },
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && babel src/PageBanner.jsx --out-file dist/PageBanner.js && node ./scripts/build-dist && cp src/main.scss dist/PageBanner.scss && cp src/page-banner-icons.scss dist/page-banner-icons.scss && node ./scripts/build-dist",
+    "build": "rm -rf dist && mkdir -p dist && babel src/PageBanner.jsx --out-file dist/PageBanner.js && cp node_modules/waypoints/lib/noframework.waypoints.min.js dist/waypoints.js && node ./scripts/build-dist && cp src/main.scss dist/PageBanner.scss && cp src/page-banner-icons.scss dist/page-banner-icons.scss && node ./scripts/build-dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
