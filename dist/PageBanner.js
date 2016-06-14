@@ -28,11 +28,12 @@ exports.default = _react2.default.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 95000,
+      duration: 3000,
       afterClose: function afterClose() {},
       topOffset: '0px',
       topPalmOffset: '0px',
-      hideShim: false
+      hideShim: false,
+      sticky: false
     };
   },
 
@@ -43,7 +44,8 @@ exports.default = _react2.default.createClass({
     afterClose: _react2.default.PropTypes.func,
     topOffset: _react2.default.PropTypes.string,
     topPalmOffset: _react2.default.PropTypes.string,
-    hideShim: _react2.default.PropTypes.bool
+    hideShim: _react2.default.PropTypes.bool,
+    sticky: _react2.default.PropTypes.bool
   },
 
   getInitialState: function getInitialState() {
@@ -56,9 +58,11 @@ exports.default = _react2.default.createClass({
   },
   componentDidMount: function componentDidMount() {
     //set the height of the banner to animate in and out correctly
+    var _props = this.props;
+    var topOffset = _props.topOffset;
+    var topPalmOffset = _props.topPalmOffset;
+
     var el = this.refs.pageBannerBody;
-    var topOffset = this.props.topOffset;
-    var topPalmOffset = this.props.topPalmOffset;
     var height = el.clientHeight;
     el.style.top = -height + 'px';
 
@@ -90,15 +94,17 @@ exports.default = _react2.default.createClass({
   },
   _toggleIsShowing: function _toggleIsShowing() {
     var isShowing = !this.state.isShowing;
-    var _props = this.props;
-    var duration = _props.duration;
-    var hideShim = _props.hideShim;
+    var _props2 = this.props;
+    var duration = _props2.duration;
+    var hideShim = _props2.hideShim;
+    var sticky = _props2.sticky;
 
     this.setState({ isShowing: isShowing });
     if (isShowing) {
-      if (duration) {
-        this.setState({ closePageBannerTimer: setTimeout(this._close, duration) });
+      if (sticky) {
+        return;
       }
+      this.setState({ closePageBannerTimer: setTimeout(this._close, duration) });
       if (hideShim) {
         return;
       }
@@ -126,10 +132,10 @@ exports.default = _react2.default.createClass({
     var _state = this.state;
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
-    var _props2 = this.props;
-    var message = _props2.message;
-    var type = _props2.type;
-    var hideShim = _props2.hideShim;
+    var _props3 = this.props;
+    var message = _props3.message;
+    var type = _props3.type;
+    var hideShim = _props3.hideShim;
 
     return _react2.default.createElement(
       'div',

@@ -14,11 +14,12 @@ export default React.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 95000,
+      duration: 3000,
       afterClose: () => {},
       topOffset: '0px',
       topPalmOffset: '0px',
-      hideShim: false
+      hideShim: false,
+      sticky: false
     };
   },
 
@@ -29,7 +30,8 @@ export default React.createClass({
     afterClose: React.PropTypes.func,
     topOffset: React.PropTypes.string,
     topPalmOffset: React.PropTypes.string,
-    hideShim: React.PropTypes.bool
+    hideShim: React.PropTypes.bool,
+    sticky: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -43,9 +45,8 @@ export default React.createClass({
 
   componentDidMount() {
     //set the height of the banner to animate in and out correctly
+    const { topOffset, topPalmOffset } = this.props;
     const el = this.refs.pageBannerBody;
-    const topOffset = this.props.topOffset;
-    const topPalmOffset = this.props.topPalmOffset;
     var height = el.clientHeight;
     el.style.top = `${-(height)}px`;
 
@@ -80,12 +81,13 @@ export default React.createClass({
 
   _toggleIsShowing() {
     const isShowing = !this.state.isShowing;
-    const { duration, hideShim } = this.props;
+    const { duration, hideShim, sticky } = this.props;
     this.setState({ isShowing });
     if(isShowing) {
-      if(duration) {
-        this.setState({closePageBannerTimer: setTimeout(this._close, duration)});
+      if(sticky) {
+        return;
       }
+      this.setState({closePageBannerTimer: setTimeout(this._close, duration)});
       if(hideShim) { return; }
       this.refs.pageBannerShim.style.height = `${this.state.height}px`;
     } else {

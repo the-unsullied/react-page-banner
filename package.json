@@ -1,6 +1,6 @@
 {
   "name": "react-page-banner",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "A notification banner that absolutedly slides below parent element.",
   "main": "./dist/PageBanner.js",
   "repository": {
