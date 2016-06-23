@@ -1,6 +1,9 @@
 # react-page-banner
 
-A full width page banner that acts as a notification to the user. When shown banner will absolutely slide below the parent element, and disappear after a certain duration.
+*A full width page banner that acts as a notification to the user. When shown banner will absolutely slide below the parent element, and disappear after a certain duration.*
+
+![React Page Banner](https://github.com/the-unsullied/react-page-banner/blob/demo/page-banner-demo.gif)
+
 
 ## Params
 
