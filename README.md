@@ -19,6 +19,8 @@
 
 **topPalmOffset** {String} pixel top offset for palm media query (default `0px`).
 
+**closeIconClass** {String} classname to add to the close icon element.
+
 
 
 ## SCSS Options
@@ -43,3 +45,5 @@ NOTE: For close button you must copy svg image in `dist/page-banner-close.svg` i
 }
 
 ```
+
+If you would like to add a custom class please pass in a string to `closeIconClass`

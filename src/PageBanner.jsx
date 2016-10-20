@@ -19,7 +19,8 @@ export default React.createClass({
       topOffset: '0px',
       topPalmOffset: '0px',
       hideShim: false,
-      sticky: false
+      sticky: false,
+      closeIconClass: ''
     };
   },
 
@@ -31,7 +32,8 @@ export default React.createClass({
     topOffset: React.PropTypes.string,
     topPalmOffset: React.PropTypes.string,
     hideShim: React.PropTypes.bool,
-    sticky: React.PropTypes.bool
+    sticky: React.PropTypes.bool,
+    closeIconClass: React.PropTypes.string
   },
 
   getInitialState() {
@@ -109,12 +111,12 @@ export default React.createClass({
 
   render() {
     const { isFixed, isShowing } = this.state;
-    const { message, type, hideShim } = this.props;
+    const { message, type, hideShim, closeIconClass } = this.props;
     return <div>
       <div ref="pageBanner" className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed})}>
         <div ref="pageBannerBody" className={classnames("page-banner__body", {'page-banner__body--showing': isShowing})}>
           <div className="page-banner__close">
-            <i className="page-banner__icon-close" onClick={this._close} />
+            <i className={`page-banner__icon-close ${closeIconClass}`} onClick={this._close} />
           </div>
           { message }
         </div>

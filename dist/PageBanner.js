@@ -33,7 +33,8 @@ exports.default = _react2.default.createClass({
       topOffset: '0px',
       topPalmOffset: '0px',
       hideShim: false,
-      sticky: false
+      sticky: false,
+      closeIconClass: ''
     };
   },
 
@@ -45,7 +46,8 @@ exports.default = _react2.default.createClass({
     topOffset: _react2.default.PropTypes.string,
     topPalmOffset: _react2.default.PropTypes.string,
     hideShim: _react2.default.PropTypes.bool,
-    sticky: _react2.default.PropTypes.bool
+    sticky: _react2.default.PropTypes.bool,
+    closeIconClass: _react2.default.PropTypes.string
   },
 
   getInitialState: function getInitialState() {
@@ -136,6 +138,7 @@ exports.default = _react2.default.createClass({
     var message = _props3.message;
     var type = _props3.type;
     var hideShim = _props3.hideShim;
+    var closeIconClass = _props3.closeIconClass;
 
     return _react2.default.createElement(
       'div',
@@ -149,7 +152,7 @@ exports.default = _react2.default.createClass({
           _react2.default.createElement(
             'div',
             { className: 'page-banner__close' },
-            _react2.default.createElement('i', { className: 'page-banner__icon-close', onClick: this._close })
+            _react2.default.createElement('i', { className: 'page-banner__icon-close ' + closeIconClass, onClick: this._close })
           ),
           message
         )
