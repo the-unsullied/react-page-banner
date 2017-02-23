@@ -23,23 +23,31 @@ var waypoint = void 0; /**
 
 
 exports.default = _react2.default.createClass({
-
   getDefaultProps: function getDefaultProps() {
     return {
       message: '',
       type: 'success',
-      duration: 3000,
+      duration: 30000,
       afterClose: function afterClose() {},
-      topOffset: '0px',
-      topPalmOffset: '0px',
+      topOffset: null,
+      topPalmOffset: null,
       hideShim: false,
       sticky: false,
-      closeIconClass: ''
+      closeIconClass: '',
+      tabIndexCloseIcon: function tabIndexCloseIcon() {
+        return '-1';
+      },
+      ariaLabelCloseIcon: 'Close Icon',
+      roleCloseIcon: 'button',
+      onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
+      ariaLabelMessage: null,
+      ariaLiveMessage: 'off',
+      roleMessage: null
     };
   },
 
   propTypes: {
-    message: _react2.default.PropTypes.string,
+    message: _react2.default.PropTypes.any,
     type: _react2.default.PropTypes.string,
     duration: _react2.default.PropTypes.number,
     afterClose: _react2.default.PropTypes.func,
@@ -47,7 +55,14 @@ exports.default = _react2.default.createClass({
     topPalmOffset: _react2.default.PropTypes.string,
     hideShim: _react2.default.PropTypes.bool,
     sticky: _react2.default.PropTypes.bool,
-    closeIconClass: _react2.default.PropTypes.string
+    closeIconClass: _react2.default.PropTypes.string,
+    tabIndexCloseIcon: _react2.default.PropTypes.func,
+    ariaLabelCloseIcon: _react2.default.PropTypes.any,
+    roleCloseIcon: _react2.default.PropTypes.string,
+    onKeyUpCloseIcon: _react2.default.PropTypes.func,
+    ariaLabelMessage: _react2.default.PropTypes.string,
+    ariaLiveMessage: _react2.default.PropTypes.string,
+    roleMessage: _react2.default.PropTypes.string
   },
 
   getInitialState: function getInitialState() {
@@ -55,27 +70,17 @@ exports.default = _react2.default.createClass({
       closePageBannerTimer: null,
       isShowing: false,
       isFixed: false,
-      height: null
+      height: null,
+      showStripped: true
     };
   },
   componentDidMount: function componentDidMount() {
     //set the height of the banner to animate in and out correctly
-    var _props = this.props;
-    var topOffset = _props.topOffset;
-    var topPalmOffset = _props.topPalmOffset;
-
     var el = this.refs.pageBannerBody;
     var height = el.clientHeight;
     el.style.top = -height + 'px';
 
     this.setState({ height: height });
-
-    if (topOffset) {
-      document.querySelector('style').textContent += '.page-banner { top: ' + topOffset + ' }';
-    }
-    if (topPalmOffset) {
-      document.querySelector('style').textContent += '@media screen and (max-width: 525px) { .page-banner { top: ' + topPalmOffset + ' } }';
-    }
 
     waypoint = new Waypoint({
       element: this.refs.pageBanner,
@@ -85,10 +90,30 @@ exports.default = _react2.default.createClass({
     });
 
     //for css animation, move to bottom of call stack
-    setTimeout(this._toggleIsShowing);
+    var closePageBannerTimer = setTimeout(this._toggleIsShowing);
+    this.setState({ closePageBannerTimer: closePageBannerTimer });
   },
   componentWillUnmount: function componentWillUnmount() {
     waypoint.destroy();
+    var closePageBannerTimer = this.state.closePageBannerTimer;
+
+    if (closePageBannerTimer) {
+      clearTimeout(closePageBannerTimer);
+    }
+  },
+  componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+    var _this = this;
+
+    var isNowShowing = !this.state.isShowing && nextState.isShowing;
+    if (isNowShowing) {
+      // This is in order for the banner content to be read properly on iOS VoiceReader.
+      // HTML needs to be stripped out of the message when it appears on screen, in order
+      // to give VoiceReader something it can handle.
+      this.setState({ showStripped: true });
+      setTimeout(function () {
+        _this.setState({ showStripped: false });
+      }, 250);
+    }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
     var isFixed = direction === 'down';
@@ -96,10 +121,10 @@ exports.default = _react2.default.createClass({
   },
   _toggleIsShowing: function _toggleIsShowing() {
     var isShowing = !this.state.isShowing;
-    var _props2 = this.props;
-    var duration = _props2.duration;
-    var hideShim = _props2.hideShim;
-    var sticky = _props2.sticky;
+    var _props = this.props;
+    var duration = _props.duration;
+    var hideShim = _props.hideShim;
+    var sticky = _props.sticky;
 
     this.setState({ isShowing: isShowing });
     if (isShowing) {
@@ -119,42 +144,83 @@ exports.default = _react2.default.createClass({
     }
   },
   _close: function _close() {
-    var _this = this;
+    var _this2 = this;
+
+    var _props2 = this.props;
+    var afterClose = _props2.afterClose;
+    var duration = _props2.duration;
 
     this._toggleIsShowing();
     clearTimeout(this.state.closePageBannerTimer);
 
     setTimeout(function () {
-      if (typeof _this.props.afterClose === 'function') {
-        _this.props.afterClose();
+      if (typeof _this2.props.afterClose === 'function') {
+        _this2.props.afterClose();
       }
-    }, 300);
+    }, duration);
+  },
+  stripHTML: function stripHTML(html) {
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+
+    var strippedText = tmp.textContent || tmp.innerText || "";
+    tmp.remove && tmp.remove();
+    return strippedText;
   },
   render: function render() {
+    var _this3 = this;
+
     var _state = this.state;
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
+    var showStripped = _state.showStripped;
     var _props3 = this.props;
     var message = _props3.message;
     var type = _props3.type;
     var hideShim = _props3.hideShim;
     var closeIconClass = _props3.closeIconClass;
+    var tabIndexCloseIcon = _props3.tabIndexCloseIcon;
+    var ariaLabelCloseIcon = _props3.ariaLabelCloseIcon;
+    var roleCloseIcon = _props3.roleCloseIcon;
+    var onKeyUpCloseIcon = _props3.onKeyUpCloseIcon;
+    var ariaLabelMessage = _props3.ariaLabelMessage;
+    var ariaLiveMessage = _props3.ariaLiveMessage;
+    var roleMessage = _props3.roleMessage;
+
+    var strippedMessage = this.stripHTML(message);
 
     return _react2.default.createElement(
       'div',
       null,
       _react2.default.createElement(
         'div',
-        { ref: 'pageBanner', className: (0, _classnames2.default)("page-banner", 'page-banner--' + type, { 'page-banner--fixed': isFixed }) },
+        { ref: 'pageBanner',
+          className: (0, _classnames2.default)("page-banner", 'page-banner--' + type, { 'page-banner--fixed': isFixed && isShowing }),
+          style: { height: isShowing ? 'auto' : 0 } },
         _react2.default.createElement(
           'div',
           { ref: 'pageBannerBody', className: (0, _classnames2.default)("page-banner__body", { 'page-banner__body--showing': isShowing }) },
           _react2.default.createElement(
             'div',
             { className: 'page-banner__close' },
-            _react2.default.createElement('i', { className: 'page-banner__icon-close ' + closeIconClass, onClick: this._close })
+            _react2.default.createElement('i', { className: 'page-banner__icon-close ' + closeIconClass,
+              onClick: this._close,
+              tabIndex: function tabIndex(isShowing) {
+                return tabIndexCloseIcon();
+              },
+              'aria-label': ariaLabelCloseIcon,
+              role: roleCloseIcon,
+              onKeyUp: function onKeyUp() {
+                return onKeyUpCloseIcon(_this3._close);
+              } })
           ),
-          message
+          _react2.default.createElement(
+            'span',
+            { 'aria-label': ariaLabelMessage || strippedMessage,
+              'aria-live': showStripped ? ariaLiveMessage : 'off',
+              role: roleMessage },
+            showStripped ? strippedMessage : message
+          )
         )
       ),
       hideShim ? null : _react2.default.createElement('div', { ref: 'pageBannerShim', className: 'page-banner__shim' })

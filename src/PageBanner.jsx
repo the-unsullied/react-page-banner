@@ -9,23 +9,29 @@ import './waypoints';
 let waypoint;
 
 export default React.createClass({
-
   getDefaultProps: function() {
     return {
       message: '',
       type: 'success',
-      duration: 3000,
+      duration: 30000,
       afterClose: () => {},
-      topOffset: '0px',
-      topPalmOffset: '0px',
+      topOffset: null,
+      topPalmOffset: null,
       hideShim: false,
       sticky: false,
-      closeIconClass: ''
+      closeIconClass: '',
+      tabIndexCloseIcon: () => '-1',
+      ariaLabelCloseIcon: 'Close Icon',
+      roleCloseIcon: 'button',
+      onKeyUpCloseIcon: () => {},
+      ariaLabelMessage: null,
+      ariaLiveMessage: 'off',
+      roleMessage: null
     };
   },
 
   propTypes: {
-    message: React.PropTypes.string,
+    message: React.PropTypes.any,
     type: React.PropTypes.string,
     duration: React.PropTypes.number,
     afterClose: React.PropTypes.func,
@@ -33,7 +39,14 @@ export default React.createClass({
     topPalmOffset: React.PropTypes.string,
     hideShim: React.PropTypes.bool,
     sticky: React.PropTypes.bool,
-    closeIconClass: React.PropTypes.string
+    closeIconClass: React.PropTypes.string,
+    tabIndexCloseIcon: React.PropTypes.func,
+    ariaLabelCloseIcon: React.PropTypes.any,
+    roleCloseIcon: React.PropTypes.string,
+    onKeyUpCloseIcon: React.PropTypes.func,
+    ariaLabelMessage: React.PropTypes.string,
+    ariaLiveMessage: React.PropTypes.string,
+    roleMessage: React.PropTypes.string
   },
 
   getInitialState() {
@@ -41,25 +54,19 @@ export default React.createClass({
       closePageBannerTimer: null,
       isShowing: false,
       isFixed: false,
-      height: null
+      height: null,
+      showStripped: true
     }
   },
 
   componentDidMount() {
     //set the height of the banner to animate in and out correctly
-    const { topOffset, topPalmOffset } = this.props;
     const el = this.refs.pageBannerBody;
     var height = el.clientHeight;
     el.style.top = `${-(height)}px`;
 
     this.setState({ height });
 
-    if(topOffset) {
-      document.querySelector('style').textContent += `.page-banner { top: ${topOffset} }`;
-    }
-    if(topPalmOffset) {
-      document.querySelector('style').textContent += `@media screen and (max-width: 525px) { .page-banner { top: ${topPalmOffset} } }`;
-    }
 
     waypoint = new Waypoint({
       element: this.refs.pageBanner,
@@ -69,11 +76,29 @@ export default React.createClass({
     });
 
     //for css animation, move to bottom of call stack
-    setTimeout(this._toggleIsShowing);
+    const closePageBannerTimer = setTimeout(this._toggleIsShowing);
+    this.setState({ closePageBannerTimer });
   },
 
   componentWillUnmount() {
     waypoint.destroy();
+    const {  closePageBannerTimer } = this.state;
+    if(closePageBannerTimer) {
+      clearTimeout(closePageBannerTimer);
+    }
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    const isNowShowing = !this.state.isShowing && nextState.isShowing;
+    if(isNowShowing) {
+      // This is in order for the banner content to be read properly on iOS VoiceReader.
+      // HTML needs to be stripped out of the message when it appears on screen, in order
+      // to give VoiceReader something it can handle.
+      this.setState({ showStripped: true });
+      setTimeout(() => {
+        this.setState({ showStripped: false });
+      }, 250)
+    }
   },
 
   _handleWaypoint(direction) {
@@ -99,6 +124,7 @@ export default React.createClass({
   },
 
   _close() {
+    const { afterClose, duration } = this.props;
     this._toggleIsShowing();
     clearTimeout(this.state.closePageBannerTimer);
 
@@ -106,19 +132,53 @@ export default React.createClass({
       if(typeof this.props.afterClose === 'function') {
         this.props.afterClose();
       }
-    }, 300);
+    }, duration);
+  },
+
+  stripHTML(html) {
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+
+    const strippedText = tmp.textContent || tmp.innerText || "";
+    tmp.remove && tmp.remove();
+    return strippedText;
   },
 
   render() {
-    const { isFixed, isShowing } = this.state;
-    const { message, type, hideShim, closeIconClass } = this.props;
+    const { isFixed, isShowing, showStripped } = this.state;
+    const {
+      message,
+      type,
+      hideShim,
+      closeIconClass,
+      tabIndexCloseIcon,
+      ariaLabelCloseIcon,
+      roleCloseIcon,
+      onKeyUpCloseIcon,
+      ariaLabelMessage,
+      ariaLiveMessage,
+      roleMessage
+    } = this.props;
+    const strippedMessage = this.stripHTML(message);
+
     return <div>
-      <div ref="pageBanner" className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed})}>
+      <div ref="pageBanner"
+        className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed && isShowing})}
+        style={{height: isShowing ? 'auto': 0}}>
         <div ref="pageBannerBody" className={classnames("page-banner__body", {'page-banner__body--showing': isShowing})}>
           <div className="page-banner__close">
-            <i className={`page-banner__icon-close ${closeIconClass}`} onClick={this._close} />
+            <i className={`page-banner__icon-close ${closeIconClass}`}
+               onClick={this._close}
+               tabIndex={(isShowing) => tabIndexCloseIcon()}
+               aria-label={ariaLabelCloseIcon}
+               role={roleCloseIcon}
+               onKeyUp={() => onKeyUpCloseIcon(this._close)} />
           </div>
-          { message }
+          <span aria-label={ariaLabelMessage || strippedMessage}
+                aria-live={showStripped ? ariaLiveMessage : 'off'}
+                role={roleMessage}>
+            { showStripped ? strippedMessage : message }
+          </span>
         </div>
       </div>
       { hideShim ? null : <div ref="pageBannerShim" className="page-banner__shim"></div> }

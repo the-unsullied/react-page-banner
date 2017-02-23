@@ -12,6 +12,10 @@ $page-banner-warning-color:             #71562e       !default;
 $page-banner-error-bg:                  #ea4858       !default;
 $page-banner-error-color:               white         !default;
 $page-banner-message-success-color:     white         !default;
+$page-banner-should-show-top-nav:       true          !default;
+$page-banner-header-height-palm:        0             !default;
+$page-banner-header-height:             0             !default;
+$page-banner-duration-animation-length: 300ms         !default;
 
 @mixin page-banner-vendor($prop, $val) {
   -webkit-#{$prop}: #{$val};
@@ -64,7 +68,14 @@ $page-banner-message-success-color:     white         !default;
   overflow: hidden;
   font-size: 1rem;
 
-  top: 0;
+  @if $should-show-top-nav == true {
+    top: $page-banner-header-height;
+    @include media-query(palm) {
+      top: $page-banner-header-height-palm;
+    }
+  } @else {
+    top: 0;
+  }
   @include page-banner-media-query(palm) {
     text-align: left;
   }
@@ -74,13 +85,13 @@ $page-banner-message-success-color:     white         !default;
   text-align: center;
   position: relative;
   padding: 15px 50px;
-  @include page-banner-vendor(transition, top 300ms ease);
+  @include page-banner-vendor(transition, top $page-banner-duration-animation-length ease);
   will-change: top;
 }
 
 .page-banner__shim {
   height: 0;
-  @include page-banner-vendor(transition, height 300ms ease);
+  @include page-banner-vendor(transition, height $page-banner-duration-animation-length ease);
 }
 
 .page-banner__body--showing {
