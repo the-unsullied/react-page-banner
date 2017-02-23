@@ -71,7 +71,8 @@ exports.default = _react2.default.createClass({
       isShowing: false,
       isFixed: false,
       height: null,
-      showStripped: true
+      showStripped: true,
+      tabIndexCloseIcon: '-1'
     };
   },
   componentDidMount: function componentDidMount() {
@@ -113,6 +114,10 @@ exports.default = _react2.default.createClass({
       setTimeout(function () {
         _this.setState({ showStripped: false });
       }, 250);
+    }
+    if (this.state.isShowing !== nextState.isShowing) {
+      var tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
+      this.setState({ tabIndexCloseIcon: tabIndexCloseIcon });
     }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
@@ -174,12 +179,12 @@ exports.default = _react2.default.createClass({
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
     var showStripped = _state.showStripped;
+    var tabIndexCloseIcon = _state.tabIndexCloseIcon;
     var _props3 = this.props;
     var message = _props3.message;
     var type = _props3.type;
     var hideShim = _props3.hideShim;
     var closeIconClass = _props3.closeIconClass;
-    var tabIndexCloseIcon = _props3.tabIndexCloseIcon;
     var ariaLabelCloseIcon = _props3.ariaLabelCloseIcon;
     var roleCloseIcon = _props3.roleCloseIcon;
     var onKeyUpCloseIcon = _props3.onKeyUpCloseIcon;
@@ -188,6 +193,12 @@ exports.default = _react2.default.createClass({
     var roleMessage = _props3.roleMessage;
 
     var strippedMessage = this.stripHTML(message);
+    var pageBannerClasses = (0, _classnames2.default)("page-banner", 'page-banner--' + type, {
+      'page-banner--fixed': isFixed && isShowing
+    });
+    var pageBannerBodyClasses = (0, _classnames2.default)("page-banner__body", {
+      'page-banner__body--showing': isShowing
+    });
 
     return _react2.default.createElement(
       'div',
@@ -195,19 +206,18 @@ exports.default = _react2.default.createClass({
       _react2.default.createElement(
         'div',
         { ref: 'pageBanner',
-          className: (0, _classnames2.default)("page-banner", 'page-banner--' + type, { 'page-banner--fixed': isFixed && isShowing }),
+          className: pageBannerClasses,
           style: { height: isShowing ? 'auto' : 0 } },
         _react2.default.createElement(
           'div',
-          { ref: 'pageBannerBody', className: (0, _classnames2.default)("page-banner__body", { 'page-banner__body--showing': isShowing }) },
+          { ref: 'pageBannerBody',
+            className: pageBannerBodyClasses },
           _react2.default.createElement(
             'div',
             { className: 'page-banner__close' },
             _react2.default.createElement('i', { className: 'page-banner__icon-close ' + closeIconClass,
               onClick: this._close,
-              tabIndex: function tabIndex(isShowing) {
-                return tabIndexCloseIcon();
-              },
+              tabIndex: tabIndexCloseIcon,
               'aria-label': ariaLabelCloseIcon,
               role: roleCloseIcon,
               onKeyUp: function onKeyUp() {
@@ -217,7 +227,7 @@ exports.default = _react2.default.createClass({
           _react2.default.createElement(
             'span',
             { 'aria-label': ariaLabelMessage || strippedMessage,
-              'aria-live': showStripped ? ariaLiveMessage : 'off',
+              'aria-live': showStripped ? 'off' : ariaLiveMessage,
               role: roleMessage },
             showStripped ? strippedMessage : message
           )

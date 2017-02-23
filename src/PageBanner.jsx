@@ -55,7 +55,8 @@ export default React.createClass({
       isShowing: false,
       isFixed: false,
       height: null,
-      showStripped: true
+      showStripped: true,
+      tabIndexCloseIcon: '-1'
     }
   },
 
@@ -98,6 +99,10 @@ export default React.createClass({
       setTimeout(() => {
         this.setState({ showStripped: false });
       }, 250)
+    }
+    if(this.state.isShowing !== nextState.isShowing) {
+      const tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
+      this.setState({ tabIndexCloseIcon });
     }
   },
 
@@ -145,13 +150,12 @@ export default React.createClass({
   },
 
   render() {
-    const { isFixed, isShowing, showStripped } = this.state;
+    const { isFixed, isShowing, showStripped, tabIndexCloseIcon } = this.state;
     const {
       message,
       type,
       hideShim,
       closeIconClass,
-      tabIndexCloseIcon,
       ariaLabelCloseIcon,
       roleCloseIcon,
       onKeyUpCloseIcon,
@@ -160,22 +164,29 @@ export default React.createClass({
       roleMessage
     } = this.props;
     const strippedMessage = this.stripHTML(message);
+    const pageBannerClasses = classnames("page-banner",`page-banner--${type}`, {
+      'page-banner--fixed': isFixed && isShowing
+    });
+    const pageBannerBodyClasses = classnames("page-banner__body", {
+      'page-banner__body--showing': isShowing
+    });
 
     return <div>
       <div ref="pageBanner"
-        className={classnames("page-banner",`page-banner--${type}`, {'page-banner--fixed': isFixed && isShowing})}
+        className={pageBannerClasses}
         style={{height: isShowing ? 'auto': 0}}>
-        <div ref="pageBannerBody" className={classnames("page-banner__body", {'page-banner__body--showing': isShowing})}>
+        <div ref="pageBannerBody"
+          className={pageBannerBodyClasses}>
           <div className="page-banner__close">
             <i className={`page-banner__icon-close ${closeIconClass}`}
                onClick={this._close}
-               tabIndex={(isShowing) => tabIndexCloseIcon()}
+               tabIndex={tabIndexCloseIcon}
                aria-label={ariaLabelCloseIcon}
                role={roleCloseIcon}
                onKeyUp={() => onKeyUpCloseIcon(this._close)} />
           </div>
           <span aria-label={ariaLabelMessage || strippedMessage}
-                aria-live={showStripped ? ariaLiveMessage : 'off'}
+                aria-live={showStripped ? 'off' : ariaLiveMessage}
                 role={roleMessage}>
             { showStripped ? strippedMessage : message }
           </span>
