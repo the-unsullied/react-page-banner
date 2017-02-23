@@ -183,7 +183,7 @@ export default React.createClass({
                tabIndex={tabIndexCloseIcon}
                aria-label={ariaLabelCloseIcon}
                role={roleCloseIcon}
-               onKeyUp={() => onKeyUpCloseIcon(this._close)} />
+               onKeyUp={(e) => onKeyUpCloseIcon(e, this._close)} />
           </div>
           <span aria-label={ariaLabelMessage || strippedMessage}
                 aria-live={showStripped ? 'off' : ariaLiveMessage}
