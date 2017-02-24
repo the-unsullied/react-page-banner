@@ -27,7 +27,7 @@ exports.default = _react2.default.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 30000,
+      duration: 3000,
       afterClose: function afterClose() {},
       topOffset: null,
       topPalmOffset: null,
@@ -118,6 +118,9 @@ exports.default = _react2.default.createClass({
       }, 250);
     }
     if (this.state.isShowing !== nextState.isShowing) {
+      if (!nextState.isShowing) {
+        return this.setState({ tabIndexCloseIcon: '-1' });
+      }
       var tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
       this.setState({ tabIndexCloseIcon: tabIndexCloseIcon });
     }
@@ -216,6 +219,13 @@ exports.default = _react2.default.createClass({
           { ref: 'pageBannerBody',
             className: pageBannerBodyClasses },
           _react2.default.createElement(
+            'span',
+            { 'aria-label': ariaLabelMessage || strippedMessage,
+              'aria-live': showStripped ? 'off' : ariaLiveMessage,
+              role: roleMessage },
+            showStripped ? strippedMessage : message
+          ),
+          _react2.default.createElement(
             'div',
             { className: 'page-banner__close' },
             _react2.default.createElement('i', { className: 'page-banner__icon-close ' + closeIconClass,
@@ -224,13 +234,6 @@ exports.default = _react2.default.createClass({
               'aria-label': ariaLabelCloseIcon,
               role: roleCloseIcon,
               onKeyUp: onKeyUpCloseIcon })
-          ),
-          _react2.default.createElement(
-            'span',
-            { 'aria-label': ariaLabelMessage || strippedMessage,
-              'aria-live': showStripped ? 'off' : ariaLiveMessage,
-              role: roleMessage },
-            showStripped ? strippedMessage : message
           )
         )
       ),

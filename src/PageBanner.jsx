@@ -13,7 +13,7 @@ export default React.createClass({
     return {
       message: '',
       type: 'success',
-      duration: 30000,
+      duration: 3000,
       afterClose: () => {},
       topOffset: null,
       topPalmOffset: null,
@@ -103,6 +103,9 @@ export default React.createClass({
       }, 250)
     }
     if(this.state.isShowing !== nextState.isShowing) {
+      if(!nextState.isShowing) {
+        return this.setState({ tabIndexCloseIcon: '-1' });
+      }
       const tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
       this.setState({ tabIndexCloseIcon });
     }
@@ -182,6 +185,11 @@ export default React.createClass({
         style={{height: isShowing ? 'auto': 0}}>
         <div ref="pageBannerBody"
           className={pageBannerBodyClasses}>
+          <span aria-label={ariaLabelMessage || strippedMessage}
+                aria-live={showStripped ? 'off' : ariaLiveMessage}
+                role={roleMessage}>
+            { showStripped ? strippedMessage : message }
+          </span>
           <div className="page-banner__close">
             <i className={`page-banner__icon-close ${closeIconClass}`}
                onClick={this._close}
@@ -190,11 +198,6 @@ export default React.createClass({
                role={roleCloseIcon}
                onKeyUp={onKeyUpCloseIcon} />
           </div>
-          <span aria-label={ariaLabelMessage || strippedMessage}
-                aria-live={showStripped ? 'off' : ariaLiveMessage}
-                role={roleMessage}>
-            { showStripped ? strippedMessage : message }
-          </span>
         </div>
       </div>
       { hideShim ? null : <div ref="pageBannerShim" className="page-banner__shim"></div> }
