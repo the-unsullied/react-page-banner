@@ -26,7 +26,8 @@ export default React.createClass({
       onKeyUpCloseIcon: () => {},
       ariaLabelMessage: null,
       ariaLiveMessage: 'off',
-      roleMessage: null
+      roleMessage: null,
+      triggerClose: 0
     };
   },
 
@@ -46,7 +47,8 @@ export default React.createClass({
     onKeyUpCloseIcon: React.PropTypes.func,
     ariaLabelMessage: React.PropTypes.string,
     ariaLiveMessage: React.PropTypes.string,
-    roleMessage: React.PropTypes.string
+    roleMessage: React.PropTypes.string,
+    triggerClose: React.PropTypes.number
   },
 
   getInitialState() {
@@ -103,6 +105,9 @@ export default React.createClass({
     if(this.state.isShowing !== nextState.isShowing) {
       const tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
       this.setState({ tabIndexCloseIcon });
+    }
+    if(this.props.triggerClose !== nextProps.triggerClose) {
+      this._close();
     }
   },
 
@@ -183,7 +188,7 @@ export default React.createClass({
                tabIndex={tabIndexCloseIcon}
                aria-label={ariaLabelCloseIcon}
                role={roleCloseIcon}
-               onKeyUp={(e) => onKeyUpCloseIcon(e, this._close)} />
+               onKeyUp={onKeyUpCloseIcon} />
           </div>
           <span aria-label={ariaLabelMessage || strippedMessage}
                 aria-live={showStripped ? 'off' : ariaLiveMessage}

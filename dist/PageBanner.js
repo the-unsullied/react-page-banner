@@ -42,7 +42,8 @@ exports.default = _react2.default.createClass({
       onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
       ariaLabelMessage: null,
       ariaLiveMessage: 'off',
-      roleMessage: null
+      roleMessage: null,
+      triggerClose: 0
     };
   },
 
@@ -62,7 +63,8 @@ exports.default = _react2.default.createClass({
     onKeyUpCloseIcon: _react2.default.PropTypes.func,
     ariaLabelMessage: _react2.default.PropTypes.string,
     ariaLiveMessage: _react2.default.PropTypes.string,
-    roleMessage: _react2.default.PropTypes.string
+    roleMessage: _react2.default.PropTypes.string,
+    triggerClose: _react2.default.PropTypes.number
   },
 
   getInitialState: function getInitialState() {
@@ -119,6 +121,9 @@ exports.default = _react2.default.createClass({
       var tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
       this.setState({ tabIndexCloseIcon: tabIndexCloseIcon });
     }
+    if (this.props.triggerClose !== nextProps.triggerClose) {
+      this._close();
+    }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
     var isFixed = direction === 'down';
@@ -173,8 +178,6 @@ exports.default = _react2.default.createClass({
     return strippedText;
   },
   render: function render() {
-    var _this3 = this;
-
     var _state = this.state;
     var isFixed = _state.isFixed;
     var isShowing = _state.isShowing;
@@ -220,9 +223,7 @@ exports.default = _react2.default.createClass({
               tabIndex: tabIndexCloseIcon,
               'aria-label': ariaLabelCloseIcon,
               role: roleCloseIcon,
-              onKeyUp: function onKeyUp() {
-                return onKeyUpCloseIcon(_this3._close);
-              } })
+              onKeyUp: onKeyUpCloseIcon })
           ),
           _react2.default.createElement(
             'span',
