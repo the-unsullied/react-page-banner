@@ -171,7 +171,7 @@ export default React.createClass({
       ariaLiveMessage,
       roleMessage
     } = this.props;
-    const strippedMessage = this.stripHTML(message);
+    const strippedMessage = ariaLabelMessage || this.stripHTML(message);
     const pageBannerClasses = classnames("page-banner",`page-banner--${type}`, {
       'page-banner--fixed': isFixed && isShowing
     });
@@ -186,7 +186,7 @@ export default React.createClass({
         <div ref="pageBannerBody"
           className={pageBannerBodyClasses}>
           <span aria-label={ariaLabelMessage || strippedMessage}
-                aria-live={showStripped ? 'off' : ariaLiveMessage}
+                aria-live={showStripped ? ariaLiveMessage : 'off'}
                 role={roleMessage}>
             { showStripped ? strippedMessage : message }
           </span>
