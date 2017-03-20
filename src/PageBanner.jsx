@@ -57,7 +57,6 @@ export default React.createClass({
       isShowing: false,
       isFixed: false,
       height: null,
-      showStripped: true,
       tabIndexCloseIcon: '-1'
     }
   },
@@ -92,16 +91,6 @@ export default React.createClass({
   },
 
   componentWillUpdate(nextProps, nextState) {
-    const isNowShowing = !this.state.isShowing && nextState.isShowing;
-    if(isNowShowing) {
-      // This is in order for the banner content to be read properly on iOS VoiceReader.
-      // HTML needs to be stripped out of the message when it appears on screen, in order
-      // to give VoiceReader something it can handle.
-      this.setState({ showStripped: true });
-      setTimeout(() => {
-        this.setState({ showStripped: false });
-      }, 250)
-    }
     if(this.state.isShowing !== nextState.isShowing) {
       if(!nextState.isShowing) {
         return this.setState({ tabIndexCloseIcon: '-1' });
@@ -158,7 +147,7 @@ export default React.createClass({
   },
 
   render() {
-    const { isFixed, isShowing, showStripped, tabIndexCloseIcon } = this.state;
+    const { isFixed, isShowing, tabIndexCloseIcon } = this.state;
     const {
       message,
       type,
@@ -186,9 +175,9 @@ export default React.createClass({
         <div ref="pageBannerBody"
           className={pageBannerBodyClasses}>
           <span aria-label={ariaLabelMessage || strippedMessage}
-                aria-live={showStripped ? ariaLiveMessage : 'off'}
+                aria-live={ariaLiveMessage}
                 role={roleMessage}>
-            { showStripped ? strippedMessage : message }
+            { message }
           </span>
           <div className="page-banner__close">
             <i className={`page-banner__icon-close ${closeIconClass}`}
