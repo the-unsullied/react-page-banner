@@ -43,7 +43,8 @@ exports.default = _react2.default.createClass({
       ariaLabelMessage: null,
       ariaLiveMessage: 'off',
       roleMessage: null,
-      triggerClose: 0
+      triggerClose: 0,
+      triggerOpen: 0
     };
   },
 
@@ -64,7 +65,8 @@ exports.default = _react2.default.createClass({
     ariaLabelMessage: _react2.default.PropTypes.string,
     ariaLiveMessage: _react2.default.PropTypes.string,
     roleMessage: _react2.default.PropTypes.string,
-    triggerClose: _react2.default.PropTypes.number
+    triggerClose: _react2.default.PropTypes.number,
+    triggerOpen: _react2.default.PropTypes.number
   },
 
   getInitialState: function getInitialState() {
@@ -90,10 +92,6 @@ exports.default = _react2.default.createClass({
         this._handleWaypoint(direction);
       }.bind(this)
     });
-
-    //for css animation, move to bottom of call stack
-    var closePageBannerTimer = setTimeout(this._toggleIsShowing);
-    this.setState({ closePageBannerTimer: closePageBannerTimer });
   },
   componentWillUnmount: function componentWillUnmount() {
     waypoint.destroy();
@@ -104,60 +102,65 @@ exports.default = _react2.default.createClass({
     }
   },
   componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
-    if (this.state.isShowing !== nextState.isShowing) {
-      if (!nextState.isShowing) {
-        return this.setState({ tabIndexCloseIcon: '-1' });
-      }
-      var tabIndexCloseIcon = this.props.tabIndexCloseIcon(nextState.isShowing);
-      this.setState({ tabIndexCloseIcon: tabIndexCloseIcon });
-    }
     if (this.props.triggerClose !== nextProps.triggerClose) {
       this._close();
+    }
+    if (this.props.triggerOpen !== nextProps.triggerOpen) {
+      this._slideOpen();
     }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
     var isFixed = direction === 'down';
     this.setState({ isFixed: isFixed });
   },
-  _toggleIsShowing: function _toggleIsShowing() {
-    var isShowing = !this.state.isShowing;
+  _open: function _open() {
     var _props = this.props;
     var duration = _props.duration;
     var hideShim = _props.hideShim;
     var sticky = _props.sticky;
 
-    this.setState({ isShowing: isShowing });
-    if (isShowing) {
-      if (sticky) {
-        return;
-      }
-      this.setState({ closePageBannerTimer: setTimeout(this._close, duration) });
-      if (hideShim) {
-        return;
-      }
-      this.refs.pageBannerShim.style.height = this.state.height + 'px';
-    } else {
-      if (hideShim) {
-        return;
-      }
-      this.refs.pageBannerShim.style.height = '0px';
+    this.setState({ isShowing: true });
+    if (sticky) {
+      return;
     }
+
+    this.setState({
+      tabIndexCloseIcon: this.props.tabIndexCloseIcon(true),
+      closePageBannerTimer: setTimeout(this._close, duration)
+    });
+    if (hideShim) {
+      return;
+    }
+    this.refs.pageBannerShim.style.height = this.state.height + 'px';
+  },
+  _slideOpen: function _slideOpen() {
+    //for css animation, move to bottom of call stack
+    var closePageBannerTimer = setTimeout(this._open);
+    this.setState({ closePageBannerTimer: closePageBannerTimer });
   },
   _close: function _close() {
     var _this = this;
 
     var _props2 = this.props;
+    var hideShim = _props2.hideShim;
+    var sticky = _props2.sticky;
     var afterClose = _props2.afterClose;
     var duration = _props2.duration;
 
-    this._toggleIsShowing();
+    this.setState({ isShowing: false });
+    if (!hideShim) {
+      this.refs.pageBannerShim.style.height = '0px';
+    }
     clearTimeout(this.state.closePageBannerTimer);
+    this.setState({ closePageBannerTimer: null });
 
     setTimeout(function () {
       if (typeof _this.props.afterClose === 'function') {
+        _this.setState({ tabIndexCloseIcon: '-1' });
         _this.props.afterClose();
       }
-    }, duration);
+      // should match animation length
+    }, 300);
   },
   stripHTML: function stripHTML(html) {
     var tmp = document.createElement("DIV");
