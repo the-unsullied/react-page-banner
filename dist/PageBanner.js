@@ -44,7 +44,8 @@ exports.default = _react2.default.createClass({
       ariaLiveMessage: 'off',
       roleMessage: null,
       triggerClose: 0,
-      triggerOpen: 0
+      triggerOpen: 0,
+      tabIndexBody: '-1'
     };
   },
 
@@ -66,7 +67,8 @@ exports.default = _react2.default.createClass({
     ariaLiveMessage: _react2.default.PropTypes.string,
     roleMessage: _react2.default.PropTypes.string,
     triggerClose: _react2.default.PropTypes.number,
-    triggerOpen: _react2.default.PropTypes.number
+    triggerOpen: _react2.default.PropTypes.number,
+    tabIndexBody: _react2.default.PropTypes.string
   },
 
   getInitialState: function getInitialState() {
@@ -186,6 +188,7 @@ exports.default = _react2.default.createClass({
     var ariaLabelMessage = _props3.ariaLabelMessage;
     var ariaLiveMessage = _props3.ariaLiveMessage;
     var roleMessage = _props3.roleMessage;
+    var tabIndexBody = _props3.tabIndexBody;
 
     var strippedMessage = ariaLabelMessage || this.stripHTML(message);
     var pageBannerClasses = (0, _classnames2.default)("page-banner", 'page-banner--' + type, {
@@ -206,6 +209,7 @@ exports.default = _react2.default.createClass({
         _react2.default.createElement(
           'div',
           { ref: 'pageBannerBody',
+            tabIndex: tabIndexBody,
             className: pageBannerBodyClasses },
           _react2.default.createElement(
             'span',

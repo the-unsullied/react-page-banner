@@ -28,7 +28,8 @@ export default React.createClass({
       ariaLiveMessage: 'off',
       roleMessage: null,
       triggerClose: 0,
-      triggerOpen: 0
+      triggerOpen: 0,
+      tabIndexBody: '-1'
     };
   },
 
@@ -50,7 +51,8 @@ export default React.createClass({
     ariaLiveMessage: React.PropTypes.string,
     roleMessage: React.PropTypes.string,
     triggerClose: React.PropTypes.number,
-    triggerOpen: React.PropTypes.number
+    triggerOpen: React.PropTypes.number,
+    tabIndexBody: React.PropTypes.string
   },
 
   getInitialState() {
@@ -161,7 +163,8 @@ export default React.createClass({
       onKeyUpCloseIcon,
       ariaLabelMessage,
       ariaLiveMessage,
-      roleMessage
+      roleMessage,
+      tabIndexBody
     } = this.props;
     const strippedMessage = ariaLabelMessage || this.stripHTML(message);
     const pageBannerClasses = classnames("page-banner",`page-banner--${type}`, {
@@ -176,6 +179,7 @@ export default React.createClass({
         className={pageBannerClasses}
         style={{height: isShowing ? 'auto': 0}}>
         <div ref="pageBannerBody"
+          tabIndex={tabIndexBody}
           className={pageBannerBodyClasses}>
           <span aria-label={ariaLabelMessage || strippedMessage}
                 aria-live={ariaLiveMessage}
