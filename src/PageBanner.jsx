@@ -142,15 +142,6 @@ export default React.createClass({
     }, 300);
   },
 
-  stripHTML(html) {
-    let tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-
-    const strippedText = tmp.textContent || tmp.innerText || "";
-    tmp.remove && tmp.remove();
-    return strippedText;
-  },
-
   render() {
     const { isFixed, isShowing, tabIndexCloseIcon } = this.state;
     const {
@@ -166,7 +157,6 @@ export default React.createClass({
       roleMessage,
       tabIndexBody
     } = this.props;
-    const strippedMessage = ariaLabelMessage || this.stripHTML(message);
     const pageBannerClasses = classnames("page-banner",`page-banner--${type}`, {
       'page-banner--fixed': isFixed && isShowing
     });
@@ -181,8 +171,7 @@ export default React.createClass({
         <div ref="pageBannerBody"
           tabIndex={tabIndexBody}
           className={pageBannerBodyClasses}>
-          <span aria-label={ariaLabelMessage || strippedMessage}
-                aria-live={ariaLiveMessage}
+          <span aria-live={ariaLiveMessage}
                 role={roleMessage}>
             { message }
           </span>
