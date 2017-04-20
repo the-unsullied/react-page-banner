@@ -24,7 +24,6 @@ export default React.createClass({
       ariaLabelCloseIcon: 'Close Icon',
       roleCloseIcon: 'button',
       onKeyUpCloseIcon: () => {},
-      ariaLabelMessage: null,
       ariaLiveMessage: 'off',
       roleMessage: null,
       triggerClose: 0,
@@ -47,7 +46,6 @@ export default React.createClass({
     ariaLabelCloseIcon: React.PropTypes.any,
     roleCloseIcon: React.PropTypes.string,
     onKeyUpCloseIcon: React.PropTypes.func,
-    ariaLabelMessage: React.PropTypes.string,
     ariaLiveMessage: React.PropTypes.string,
     roleMessage: React.PropTypes.string,
     triggerClose: React.PropTypes.number,
@@ -152,7 +150,6 @@ export default React.createClass({
       ariaLabelCloseIcon,
       roleCloseIcon,
       onKeyUpCloseIcon,
-      ariaLabelMessage,
       ariaLiveMessage,
       roleMessage,
       tabIndexBody
