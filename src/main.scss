@@ -70,7 +70,7 @@ $page-banner-duration-animation-length: 300ms         !default;
 
   @if $should-show-top-nav == true {
     top: $page-banner-header-height;
-    @include media-query(palm) {
+    @include page-banner-media-query(palm) {
       top: $page-banner-header-height-palm;
     }
   } @else {

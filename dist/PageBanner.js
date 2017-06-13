@@ -20,6 +20,8 @@ var waypoint = void 0; /**
                        @class PageBanner
                        to set shim, make sure that <PageBanner /> is at the top of your page.
                        */
+
+
 exports.default = _react2.default.createClass({
   getDefaultProps: function getDefaultProps() {
     return {
@@ -38,7 +40,6 @@ exports.default = _react2.default.createClass({
       ariaLabelCloseIcon: 'Close Icon',
       roleCloseIcon: 'button',
       onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
-      ariaLabelMessage: null,
       ariaLiveMessage: 'off',
       roleMessage: null,
       triggerClose: 0,
@@ -61,7 +62,6 @@ exports.default = _react2.default.createClass({
     ariaLabelCloseIcon: _react2.default.PropTypes.any,
     roleCloseIcon: _react2.default.PropTypes.string,
     onKeyUpCloseIcon: _react2.default.PropTypes.func,
-    ariaLabelMessage: _react2.default.PropTypes.string,
     ariaLiveMessage: _react2.default.PropTypes.string,
     roleMessage: _react2.default.PropTypes.string,
     triggerClose: _react2.default.PropTypes.number,
@@ -114,10 +114,10 @@ exports.default = _react2.default.createClass({
     this.setState({ isFixed: isFixed });
   },
   _open: function _open() {
-    var _props = this.props,
-        duration = _props.duration,
-        hideShim = _props.hideShim,
-        sticky = _props.sticky;
+    var _props = this.props;
+    var duration = _props.duration;
+    var hideShim = _props.hideShim;
+    var sticky = _props.sticky;
 
     this.setState({ isShowing: true });
     if (sticky) {
@@ -141,11 +141,11 @@ exports.default = _react2.default.createClass({
   _close: function _close() {
     var _this = this;
 
-    var _props2 = this.props,
-        hideShim = _props2.hideShim,
-        sticky = _props2.sticky,
-        afterClose = _props2.afterClose,
-        duration = _props2.duration;
+    var _props2 = this.props;
+    var hideShim = _props2.hideShim;
+    var sticky = _props2.sticky;
+    var afterClose = _props2.afterClose;
+    var duration = _props2.duration;
 
     this.setState({ isShowing: false });
     if (!hideShim) {
@@ -163,22 +163,21 @@ exports.default = _react2.default.createClass({
     }, 300);
   },
   render: function render() {
-    var _state = this.state,
-        isFixed = _state.isFixed,
-        isShowing = _state.isShowing,
-        tabIndexCloseIcon = _state.tabIndexCloseIcon;
-    var _props3 = this.props,
-        message = _props3.message,
-        type = _props3.type,
-        hideShim = _props3.hideShim,
-        closeIconClass = _props3.closeIconClass,
-        ariaLabelCloseIcon = _props3.ariaLabelCloseIcon,
-        roleCloseIcon = _props3.roleCloseIcon,
-        onKeyUpCloseIcon = _props3.onKeyUpCloseIcon,
-        ariaLabelMessage = _props3.ariaLabelMessage,
-        ariaLiveMessage = _props3.ariaLiveMessage,
-        roleMessage = _props3.roleMessage,
-        tabIndexBody = _props3.tabIndexBody;
+    var _state = this.state;
+    var isFixed = _state.isFixed;
+    var isShowing = _state.isShowing;
+    var tabIndexCloseIcon = _state.tabIndexCloseIcon;
+    var _props3 = this.props;
+    var message = _props3.message;
+    var type = _props3.type;
+    var hideShim = _props3.hideShim;
+    var closeIconClass = _props3.closeIconClass;
+    var ariaLabelCloseIcon = _props3.ariaLabelCloseIcon;
+    var roleCloseIcon = _props3.roleCloseIcon;
+    var onKeyUpCloseIcon = _props3.onKeyUpCloseIcon;
+    var ariaLiveMessage = _props3.ariaLiveMessage;
+    var roleMessage = _props3.roleMessage;
+    var tabIndexBody = _props3.tabIndexBody;
 
     var pageBannerClasses = (0, _classnames2.default)("page-banner", 'page-banner--' + type, {
       'page-banner--fixed': isFixed && isShowing
