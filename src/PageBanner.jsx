@@ -25,6 +25,7 @@ export default React.createClass({
       roleCloseIcon: 'button',
       onKeyUpCloseIcon: () => {},
       ariaLiveMessage: 'off',
+      ariaHidden: true,
       roleMessage: null,
       triggerClose: 0,
       triggerOpen: 0,
@@ -47,6 +48,7 @@ export default React.createClass({
     roleCloseIcon: React.PropTypes.string,
     onKeyUpCloseIcon: React.PropTypes.func,
     ariaLiveMessage: React.PropTypes.string,
+    ariaHidden: React.PropTypes.bool,
     roleMessage: React.PropTypes.string,
     triggerClose: React.PropTypes.number,
     triggerOpen: React.PropTypes.number,
@@ -59,8 +61,9 @@ export default React.createClass({
       isShowing: false,
       isFixed: false,
       height: null,
-      tabIndexCloseIcon: '-1'
-    }
+      tabIndexCloseIcon: '-1',
+      ariaHidden: this.props.ariaHidden
+    };
   },
 
   componentDidMount() {
@@ -87,12 +90,15 @@ export default React.createClass({
     }
   },
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if(this.props.triggerClose !== nextProps.triggerClose) {
       this._close();
     }
     if(this.props.triggerOpen !== nextProps.triggerOpen) {
       this._slideOpen();
+    }
+    if(this.props.ariaHidden !== nextProps.ariaHidden) {
+      this.setState({ ariaHidden: nextProps.ariaHidden });
     }
   },
 
@@ -110,7 +116,8 @@ export default React.createClass({
 
     this.setState({
       tabIndexCloseIcon: this.props.tabIndexCloseIcon(true),
-      closePageBannerTimer: setTimeout(this._close, duration)
+      closePageBannerTimer: setTimeout(this._close, duration),
+      ariaHidden: false
     });
     if(hideShim) { return; }
     this.refs.pageBannerShim.style.height = `${this.state.height}px`;
@@ -132,6 +139,7 @@ export default React.createClass({
     this.setState({ closePageBannerTimer: null });
 
     setTimeout(() => {
+      this.setState({ ariaHidden: true });
       if(typeof this.props.afterClose === 'function') {
         this.setState({ tabIndexCloseIcon: '-1' });
         this.props.afterClose();
@@ -141,7 +149,7 @@ export default React.createClass({
   },
 
   render() {
-    const { isFixed, isShowing, tabIndexCloseIcon } = this.state;
+    const { isFixed, ariaHidden, isShowing, tabIndexCloseIcon } = this.state;
     const {
       message,
       type,
@@ -164,6 +172,7 @@ export default React.createClass({
     return <div>
       <div ref="pageBanner"
         className={pageBannerClasses}
+        aria-hidden={ariaHidden}
         style={{height: isShowing ? 'auto': 0}}>
         <div ref="pageBannerBody"
           tabIndex={tabIndexBody}

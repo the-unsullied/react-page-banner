@@ -21,6 +21,8 @@
 
 **closeIconClass** {String} classname to add to the close icon element.
 
+**ariaHidden** {Boolean} used to control whether or not the page banner is hidden from screen reader. By default it is true after it closes and animation has completed. It is false if it is showing.
+
 
 
 ## SCSS Options

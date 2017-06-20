@@ -41,6 +41,7 @@ exports.default = _react2.default.createClass({
       roleCloseIcon: 'button',
       onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
       ariaLiveMessage: 'off',
+      ariaHidden: true,
       roleMessage: null,
       triggerClose: 0,
       triggerOpen: 0,
@@ -63,6 +64,7 @@ exports.default = _react2.default.createClass({
     roleCloseIcon: _react2.default.PropTypes.string,
     onKeyUpCloseIcon: _react2.default.PropTypes.func,
     ariaLiveMessage: _react2.default.PropTypes.string,
+    ariaHidden: _react2.default.PropTypes.bool,
     roleMessage: _react2.default.PropTypes.string,
     triggerClose: _react2.default.PropTypes.number,
     triggerOpen: _react2.default.PropTypes.number,
@@ -75,7 +77,8 @@ exports.default = _react2.default.createClass({
       isShowing: false,
       isFixed: false,
       height: null,
-      tabIndexCloseIcon: '-1'
+      tabIndexCloseIcon: '-1',
+      ariaHidden: this.props.ariaHidden
     };
   },
   componentDidMount: function componentDidMount() {
@@ -101,12 +104,15 @@ exports.default = _react2.default.createClass({
       clearTimeout(closePageBannerTimer);
     }
   },
-  componentWillUpdate: function componentWillUpdate(nextProps, nextState) {
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     if (this.props.triggerClose !== nextProps.triggerClose) {
       this._close();
     }
     if (this.props.triggerOpen !== nextProps.triggerOpen) {
       this._slideOpen();
+    }
+    if (this.props.ariaHidden !== nextProps.ariaHidden) {
+      this.setState({ ariaHidden: nextProps.ariaHidden });
     }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
@@ -126,7 +132,8 @@ exports.default = _react2.default.createClass({
 
     this.setState({
       tabIndexCloseIcon: this.props.tabIndexCloseIcon(true),
-      closePageBannerTimer: setTimeout(this._close, duration)
+      closePageBannerTimer: setTimeout(this._close, duration),
+      ariaHidden: false
     });
     if (hideShim) {
       return;
@@ -155,6 +162,7 @@ exports.default = _react2.default.createClass({
     this.setState({ closePageBannerTimer: null });
 
     setTimeout(function () {
+      _this.setState({ ariaHidden: true });
       if (typeof _this.props.afterClose === 'function') {
         _this.setState({ tabIndexCloseIcon: '-1' });
         _this.props.afterClose();
@@ -165,6 +173,7 @@ exports.default = _react2.default.createClass({
   render: function render() {
     var _state = this.state;
     var isFixed = _state.isFixed;
+    var ariaHidden = _state.ariaHidden;
     var isShowing = _state.isShowing;
     var tabIndexCloseIcon = _state.tabIndexCloseIcon;
     var _props3 = this.props;
@@ -193,6 +202,7 @@ exports.default = _react2.default.createClass({
         'div',
         { ref: 'pageBanner',
           className: pageBannerClasses,
+          'aria-hidden': ariaHidden,
           style: { height: isShowing ? 'auto' : 0 } },
         _react2.default.createElement(
           'div',
