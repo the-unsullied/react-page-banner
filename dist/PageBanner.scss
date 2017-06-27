@@ -16,6 +16,7 @@ $page-banner-should-show-top-nav:       true          !default;
 $page-banner-header-height-palm:        0             !default;
 $page-banner-header-height:             0             !default;
 $page-banner-duration-animation-length: 300ms         !default;
+$page-banner-should-show-top-nav:       true          !default;
 
 @mixin page-banner-vendor($prop, $val) {
   -webkit-#{$prop}: #{$val};
@@ -68,7 +69,7 @@ $page-banner-duration-animation-length: 300ms         !default;
   overflow: hidden;
   font-size: 1rem;
 
-  @if $should-show-top-nav == true {
+  @if $page-banner-should-show-top-nav == true {
     top: $page-banner-header-height;
     @include page-banner-media-query(palm) {
       top: $page-banner-header-height-palm;
