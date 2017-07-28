@@ -1,10 +1,10 @@
 $page-banner-breakpoints: (
-    "palm"          "screen and (max-width: 525px)",
-    "lap"           "screen and (min-width: 526px) and (max-width: 768px)",
-    "lap-and-up"    "screen and (min-width: 769px)",
-    "portable"      "screen and (max-width: 768px)",
-    "desk"          "screen and (min-width: 769px)",
-    "retina"        "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
+        "palm"          "screen and (max-width: 525px)",
+        "lap"           "screen and (min-width: 526px) and (max-width: 768px)",
+        "lap-and-up"    "screen and (min-width: 769px)",
+        "portable"      "screen and (max-width: 768px)",
+        "desk"          "screen and (min-width: 769px)",
+        "retina"        "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
 ) !default;
 $page-banner-success-bg:                #8CC237       !default;
 $page-banner-warning-bg:                #f9f1c5       !default;
@@ -28,46 +28,61 @@ $page-banner-should-show-top-nav:       true          !default;
 
 @mixin page-banner-media-query($mq) {
 
-    $breakpoint-found: false;
+  $breakpoint-found: false;
 
-    // Loop through the list of breakpoints we’ve provided in our settings file.
-    @each $breakpoint in $page-banner-breakpoints {
+  // Loop through the list of breakpoints we’ve provided in our settings file.
+  @each $breakpoint in $page-banner-breakpoints {
 
-        // Grab the alias and the condition from their respective locations in
-        // the list.
-        $alias:     nth($breakpoint, 1);
-        $condition: nth($breakpoint, 2);
+    // Grab the alias and the condition from their respective locations in
+    // the list.
+    $alias:     nth($breakpoint, 1);
+    $condition: nth($breakpoint, 2);
 
-        // If the media query we’ve specified has an alias and a condition...
-        @if $mq == $alias and $condition {
+    // If the media query we’ve specified has an alias and a condition...
+    @if $mq == $alias and $condition {
 
-            // ...tell the mixin that we’ve found it...
-            $breakpoint-found: true;
+      // ...tell the mixin that we’ve found it...
+      $breakpoint-found: true;
 
-            // ...and spit it out here.
-            @media #{$condition} {
-                @content;
-            }
-
-        }
+      // ...and spit it out here.
+      @media #{$condition} {
+        @content;
+      }
 
     }
 
-    // If the user specifies a non-exitent alias, send them a warning.
-    @if $breakpoint-found == false{
-        @warn "Oops! Breakpoint ‘#{$mq}’ does not exist."
-    }
+  }
+
+  // If the user specifies a non-exitent alias, send them a warning.
+  @if $breakpoint-found == false{
+    @warn "Oops! Breakpoint ‘#{$mq}’ does not exist."
+  }
 
 }
 
-.page-banner {
+.page-banner-container {
   position: absolute;
   width: 100%;
   left: 0;
-  text-align: center;
+  top: 0;
   z-index: 1;
+}
+
+.page-banner-container--fixed{
+  position: fixed;
+  @include page-banner-vendor(transform, translateZ(1px));
+  top: 0 !important;
+}
+
+.page-banner {
+  width: 100%;
+  text-align: center;
   overflow: hidden;
   font-size: 1rem;
+  position: relative;
+  height: 0;
+  will-change: top;
+  @include page-banner-vendor(transition, height $page-banner-duration-animation-length ease);
 
   @if $page-banner-should-show-top-nav == true {
     top: $page-banner-header-height;
@@ -84,19 +99,12 @@ $page-banner-should-show-top-nav:       true          !default;
 
 .page-banner__body {
   text-align: center;
-  position: relative;
   padding: 15px 50px;
-  @include page-banner-vendor(transition, top $page-banner-duration-animation-length ease);
-  will-change: top;
 }
 
 .page-banner__shim {
   height: 0;
   @include page-banner-vendor(transition, height $page-banner-duration-animation-length ease);
-}
-
-.page-banner__body--showing {
-  top: 0 !important;
 }
 
 .page-banner__close {

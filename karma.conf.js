@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'test/**/*.spec.js'
+      'test/**/*.spec.jsx'
     ],
 
 
@@ -32,11 +32,23 @@ module.exports = function(config) {
       'test/**/*.+(js|jsx)': ['browserify']
     },
 
+    babelPreprocessor: {
+      options: {
+        presets: ['airbnb']
+      }
+    },
+
     browserify: {
       debug: true,
+      transform: [
+        ['babelify', { presets: ['airbnb'] }]
+      ],
       configure: function(bundle) {
-        bundle.once('prebundle', function() {
+        bundle.on('prebundle', function() {
           bundle.transform('babelify');
+          bundle.external('react/addons');
+          bundle.external('react/lib/ReactContext');
+          bundle.external('react/lib/ExecutionEnvironment');
         });
       }
     },
