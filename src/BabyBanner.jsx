@@ -13,9 +13,11 @@ export default React.createClass({
     afterClose: React.PropTypes.func,
     ariaLabelCloseIcon: React.PropTypes.any,
     ariaLiveMessage: React.PropTypes.string,
+    bannerId: React.PropTypes.number,
     closeIconClass: React.PropTypes.string,
     duration: React.PropTypes.number,
     message: React.PropTypes.any,
+    onBannerClose:  React.PropTypes.func,
     onKeyUpCloseIcon: React.PropTypes.func,
     roleCloseIcon: React.PropTypes.string,
     roleMessage: React.PropTypes.string,
@@ -29,15 +31,15 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
-      afterClose: () => {
-      },
+      afterClose: () => {},
       ariaLabelCloseIcon: 'Close Icon',
       ariaLiveMessage: 'off',
+      bannerId: 0,
       closeIconClass: '',
       duration: 3000,
       message: '',
-      onKeyUpCloseIcon: () => {
-      },
+      onBannerClose: () => {},
+      onKeyUpCloseIcon: () => {},
       roleCloseIcon: 'button',
       roleMessage: null,
       sticky: false,
@@ -53,8 +55,6 @@ export default React.createClass({
     return {
       closePageBannerTimer: null,
       isShowing: false,
-      isFixed: false,
-      height: null,
       tabIndexCloseIcon: '-1'
     };
   },
@@ -72,6 +72,7 @@ export default React.createClass({
 
   _open() {
     const {duration, sticky} = this.props;
+
     this.setState({isShowing: true});
     this._toggleHeight(true);
 
@@ -86,12 +87,15 @@ export default React.createClass({
   },
 
   _toggleHeight(isShowing) {
-    const el = this.pageBanner;
-    const elementHeight = el.scrollHeight;
-    const height = isShowing ? elementHeight : 0;
+    const pageBanner = this.pageBanner;
 
-    el.style.height = `${(height)}px`;
-    this.setState({height});
+    if (pageBanner) {
+      const elementHeight = pageBanner.scrollHeight;
+      const height = isShowing ? elementHeight : 0;
+
+      pageBanner.style.height = `${(height)}px`;
+    }
+
   },
 
   _slideOpen() {

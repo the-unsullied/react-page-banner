@@ -26,9 +26,11 @@ exports.default = _react2.default.createClass({
     afterClose: _react2.default.PropTypes.func,
     ariaLabelCloseIcon: _react2.default.PropTypes.any,
     ariaLiveMessage: _react2.default.PropTypes.string,
+    bannerId: _react2.default.PropTypes.number,
     closeIconClass: _react2.default.PropTypes.string,
     duration: _react2.default.PropTypes.number,
     message: _react2.default.PropTypes.any,
+    onBannerClose: _react2.default.PropTypes.func,
     onKeyUpCloseIcon: _react2.default.PropTypes.func,
     roleCloseIcon: _react2.default.PropTypes.string,
     roleMessage: _react2.default.PropTypes.string,
@@ -45,9 +47,11 @@ exports.default = _react2.default.createClass({
       afterClose: function afterClose() {},
       ariaLabelCloseIcon: 'Close Icon',
       ariaLiveMessage: 'off',
+      bannerId: 0,
       closeIconClass: '',
       duration: 3000,
       message: '',
+      onBannerClose: function onBannerClose() {},
       onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
       roleCloseIcon: 'button',
       roleMessage: null,
@@ -65,8 +69,6 @@ exports.default = _react2.default.createClass({
     return {
       closePageBannerTimer: null,
       isShowing: false,
-      isFixed: false,
-      height: null,
       tabIndexCloseIcon: '-1'
     };
   },
@@ -85,6 +87,7 @@ exports.default = _react2.default.createClass({
         duration = _props.duration,
         sticky = _props.sticky;
 
+
     this.setState({ isShowing: true });
     this._toggleHeight(true);
 
@@ -98,12 +101,14 @@ exports.default = _react2.default.createClass({
     });
   },
   _toggleHeight: function _toggleHeight(isShowing) {
-    var el = this.pageBanner;
-    var elementHeight = el.scrollHeight;
-    var height = isShowing ? elementHeight : 0;
+    var pageBanner = this.pageBanner;
 
-    el.style.height = height + 'px';
-    this.setState({ height: height });
+    if (pageBanner) {
+      var elementHeight = pageBanner.scrollHeight;
+      var height = isShowing ? elementHeight : 0;
+
+      pageBanner.style.height = height + 'px';
+    }
   },
   _slideOpen: function _slideOpen() {
     // for css animation, move to bottom of call stack

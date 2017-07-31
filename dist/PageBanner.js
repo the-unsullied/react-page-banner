@@ -12,6 +12,8 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _immutable = require('immutable');
+
 var _BabyBanner = require('./BabyBanner');
 
 var _BabyBanner2 = _interopRequireDefault(_BabyBanner);
@@ -25,7 +27,6 @@ exports.default = _react2.default.createClass({
   waypoint: null,
 
   propTypes: {
-    ariaHidden: _react2.default.PropTypes.string,
     pageMessages: _react2.default.PropTypes.object,
     triggerClose: _react2.default.PropTypes.number,
     triggerOpen: _react2.default.PropTypes.number
@@ -33,7 +34,7 @@ exports.default = _react2.default.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      pageMessages: {},
+      pageMessages: (0, _immutable.List)(),
       triggerClose: 0,
       triggerOpen: 0,
       hideShim: false
@@ -71,6 +72,7 @@ exports.default = _react2.default.createClass({
   },
   componentDidUpdate: function componentDidUpdate() {
     var bannerContainer = this.pageBannerContainer;
+
     if (bannerContainer) {
       this._toggleShimHeight(bannerContainer);
       this.waypoint = new Waypoint({
@@ -141,9 +143,7 @@ exports.default = _react2.default.createClass({
 
 
     return pageMessages.map(function (pageMessage, index) {
-      if (pageMessage === null) {
-        return;
-      }
+      if (pageMessage === null) return;
 
       return _react2.default.createElement(_BabyBanner2.default, {
         key: index,

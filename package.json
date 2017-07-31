@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "babel-preset-airbnb": "^2.3.2",
-    "enzyme": "2.8.0"
+    "enzyme": "2.8.0",
+    "immutable": "^3.8.1"
   }
 }

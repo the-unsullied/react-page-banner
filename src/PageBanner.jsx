@@ -1,5 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
+import { List } from 'immutable';
+
 import BabyBanner from './BabyBanner';
 
 import './waypoints';
@@ -9,7 +11,6 @@ export default React.createClass({
   waypoint: null,
 
   propTypes: {
-    ariaHidden: React.PropTypes.string,
     pageMessages: React.PropTypes.object,
     triggerClose: React.PropTypes.number,
     triggerOpen: React.PropTypes.number
@@ -17,7 +18,7 @@ export default React.createClass({
 
   getDefaultProps() {
     return {
-      pageMessages: {},
+      pageMessages: List(),
       triggerClose: 0,
       triggerOpen: 0,
       hideShim: false
@@ -56,6 +57,7 @@ export default React.createClass({
 
   componentDidUpdate() {
     const bannerContainer = this.pageBannerContainer;
+
     if (bannerContainer) {
       this._toggleShimHeight(bannerContainer);
       this.waypoint = new Waypoint({
@@ -116,9 +118,7 @@ export default React.createClass({
     const { pageMessages, onBannerClose } = this.props;
 
     return pageMessages.map((pageMessage, index) => {
-      if (pageMessage === null) {
-        return;
-      }
+      if (pageMessage === null) return;
 
       return (<BabyBanner
         key={index}
