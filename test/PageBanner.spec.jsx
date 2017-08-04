@@ -44,9 +44,8 @@ context('PageBanner', () => {
         pageMessages: fromJS([{message: 'Page Banner 1', type: 'success', duration: 0}])
       });
 
-      expect(wrapper.find('div.page-banner-container')).to.have.length(1);
+      expect(wrapper.find('div.page-banner__container')).to.have.length(1);
       expect(wrapper.find('BabyBanner')).to.have.length(1);
-      expect(wrapper.find('div.page-banner__shim')).to.have.length(1);
     });
 
     it('should render pageBanner container with multiple BabyPageBanners', () => {
@@ -59,21 +58,8 @@ context('PageBanner', () => {
         ])
       });
 
-      expect(wrapper.find('div.page-banner-container')).to.have.length(1);
+      expect(wrapper.find('div.page-banner__container')).to.have.length(1);
       expect(wrapper.find('BabyBanner')).to.have.length(3);
-      expect(wrapper.find('div.page-banner__shim')).to.have.length(1);
-    });
-
-    it('should render pageBanner container without shim', () => {
-      const wrapper = createComponent();
-      wrapper.setProps({
-        triggerOpen: 1,
-        hideShim: true,
-        pageMessages: fromJS([{message: 'Page Banner 1', type: 'success', duration: 0}])
-      });
-
-      expect(wrapper.find('div.page-banner-container')).to.have.length(1);
-      expect(wrapper.find('div.page-banner__shim')).to.have.length(0);
     });
   });
 });

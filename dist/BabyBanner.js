@@ -15,8 +15,8 @@ var _classnames2 = _interopRequireDefault(_classnames);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- @class PageBanner
- to set shim, make sure that <PageBanner /> is at the top of your page.
+ @class BabyBanner
+ to set shim, make sure that <BabyBanner /> is at the top of your page.
  */
 
 exports.default = _react2.default.createClass({
@@ -85,7 +85,8 @@ exports.default = _react2.default.createClass({
   _open: function _open() {
     var _props = this.props,
         duration = _props.duration,
-        sticky = _props.sticky;
+        sticky = _props.sticky,
+        tabIndexCloseIcon = _props.tabIndexCloseIcon;
 
 
     this.setState({ isShowing: true });
@@ -96,7 +97,7 @@ exports.default = _react2.default.createClass({
     }
 
     this.setState({
-      tabIndexCloseIcon: this.props.tabIndexCloseIcon(true),
+      tabIndexCloseIcon: tabIndexCloseIcon(true),
       closePageBannerTimer: setTimeout(this._close, duration)
     });
   },

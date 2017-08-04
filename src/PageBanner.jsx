@@ -6,6 +6,7 @@ import BabyBanner from './BabyBanner';
 
 import './waypoints';
 
+
 export default React.createClass({
   displayName: 'PageBanner',
   waypoint: null,
@@ -21,7 +22,6 @@ export default React.createClass({
       pageMessages: List(),
       triggerClose: 0,
       triggerOpen: 0,
-      hideShim: false
     };
   },
 
@@ -59,12 +59,10 @@ export default React.createClass({
     const bannerContainer = this.pageBannerContainer;
 
     if (bannerContainer) {
-      this._toggleShimHeight(bannerContainer);
+      if (this.waypoint) return;
       this.waypoint = new Waypoint({
         element: this.pageBannerContainer,
-        handler: function (direction) {
-          this._handleWaypoint(direction);
-        }.bind(this)
+        handler: this._handleWaypoint
       });
     }
   },
@@ -75,43 +73,19 @@ export default React.createClass({
     this.setState({ isFixed });
   },
 
-  _toggleShimHeight(bannerContainer) {
-    const pageBanners = bannerContainer.getElementsByClassName('page-banner__body');
-
-    let shimHeight = 0;
-    Array.from(pageBanners).forEach(children => {
-      shimHeight += children.scrollHeight;
-    });
-
-    this.pageBannerShim.style.height = `${(shimHeight)}px`;
-  },
-
   render() {
     const { ariaHidden, isFixed, isShowing } = this.state;
 
-    return (<div>
+    return (
       <div
         aria-hidden={ariaHidden}
-        className={classnames('page-banner-container', { 'page-banner-container--fixed': isFixed })}
+        className={classnames('page-banner__container', { 'page-banner__container--fixed': isFixed })}
         ref={pageBannerContainer => {
           this.pageBannerContainer = pageBannerContainer;
         }}
       >
         { isShowing ? this.renderPageBanner() : null }
-      </div>
-      { this.renderShim() }
-    </div>);
-  },
-
-  renderShim() {
-    const { hideShim } = this.props;
-
-    return (hideShim ? null : <div
-      ref={bannerShim => {
-        this.pageBannerShim = bannerShim;
-      }}
-      className='page-banner__shim'
-    />);
+      </div>);
   },
 
   renderPageBanner() {

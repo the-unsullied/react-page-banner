@@ -1,6 +1,6 @@
 /**
- @class PageBanner
- to set shim, make sure that <PageBanner /> is at the top of your page.
+ @class BabyBanner
+ to set shim, make sure that <BabyBanner /> is at the top of your page.
  */
 
 import React from 'react';
@@ -17,7 +17,7 @@ export default React.createClass({
     closeIconClass: React.PropTypes.string,
     duration: React.PropTypes.number,
     message: React.PropTypes.any,
-    onBannerClose:  React.PropTypes.func,
+    onBannerClose: React.PropTypes.func,
     onKeyUpCloseIcon: React.PropTypes.func,
     roleCloseIcon: React.PropTypes.string,
     roleMessage: React.PropTypes.string,
@@ -64,16 +64,16 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    const {closePageBannerTimer} = this.state;
+    const { closePageBannerTimer } = this.state;
     if (closePageBannerTimer) {
       clearTimeout(closePageBannerTimer);
     }
   },
 
   _open() {
-    const {duration, sticky} = this.props;
+    const { duration, sticky, tabIndexCloseIcon } = this.props;
 
-    this.setState({isShowing: true});
+    this.setState({ isShowing: true });
     this._toggleHeight(true);
 
     if (sticky) {
@@ -81,7 +81,7 @@ export default React.createClass({
     }
 
     this.setState({
-      tabIndexCloseIcon: this.props.tabIndexCloseIcon(true),
+      tabIndexCloseIcon: tabIndexCloseIcon(true),
       closePageBannerTimer: setTimeout(this._close, duration)
     });
   },
@@ -93,29 +93,28 @@ export default React.createClass({
       const elementHeight = pageBanner.scrollHeight;
       const height = isShowing ? elementHeight : 0;
 
-      pageBanner.style.height = `${(height)}px`;
+      pageBanner.style.height = `${height}px`;
     }
-
   },
 
   _slideOpen() {
     // for css animation, move to bottom of call stack
     const closePageBannerTimer = setTimeout(this._open);
-    this.setState({closePageBannerTimer});
+    this.setState({ closePageBannerTimer });
   },
 
   _close() {
-    const {afterClose, bannerId, onBannerClose} = this.props;
+    const { afterClose, bannerId, onBannerClose } = this.props;
 
-    this.setState({isShowing: false});
+    this.setState({ isShowing: false });
     this._toggleHeight(false);
 
     clearTimeout(this.state.closePageBannerTimer);
-    this.setState({closePageBannerTimer: null});
+    this.setState({ closePageBannerTimer: null });
 
     setTimeout(() => {
       if (typeof afterClose === 'function') {
-        this.setState({tabIndexCloseIcon: '-1'});
+        this.setState({ tabIndexCloseIcon: '-1' });
         afterClose(bannerId);
       }
       onBannerClose(bannerId);
@@ -124,7 +123,7 @@ export default React.createClass({
   },
 
   render() {
-    const {tabIndexCloseIcon} = this.state;
+    const { tabIndexCloseIcon } = this.state;
     const {
       message,
       type,

@@ -1,22 +1,22 @@
 $page-banner-breakpoints: (
-        "palm"          "screen and (max-width: 525px)",
-        "lap"           "screen and (min-width: 526px) and (max-width: 768px)",
-        "lap-and-up"    "screen and (min-width: 769px)",
-        "portable"      "screen and (max-width: 768px)",
-        "desk"          "screen and (min-width: 769px)",
-        "retina"        "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
+        "palm" "screen and (max-width: 525px)",
+        "lap" "screen and (min-width: 526px) and (max-width: 768px)",
+        "lap-and-up" "screen and (min-width: 769px)",
+        "portable" "screen and (max-width: 768px)",
+        "desk" "screen and (min-width: 769px)",
+        "retina" "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)"
 ) !default;
-$page-banner-success-bg:                #8CC237       !default;
-$page-banner-warning-bg:                #f9f1c5       !default;
-$page-banner-warning-color:             #71562e       !default;
-$page-banner-error-bg:                  #ea4858       !default;
-$page-banner-error-color:               white         !default;
-$page-banner-message-success-color:     white         !default;
-$page-banner-should-show-top-nav:       true          !default;
-$page-banner-header-height-palm:        0             !default;
-$page-banner-header-height:             0             !default;
-$page-banner-duration-animation-length: 300ms         !default;
-$page-banner-should-show-top-nav:       true          !default;
+$page-banner-success-bg: #8CC237 !default;
+$page-banner-warning-bg: #f9f1c5 !default;
+$page-banner-warning-color: #71562e !default;
+$page-banner-error-bg: #ea4858 !default;
+$page-banner-error-color: white !default;
+$page-banner-message-success-color: white !default;
+$page-banner-should-show-top-nav: true !default;
+$page-banner-header-height-palm: 0 !default;
+$page-banner-header-height: 0 !default;
+$page-banner-duration-animation-length: 300ms !default;
+$page-banner-should-show-top-nav: true !default;
 
 @mixin page-banner-vendor($prop, $val) {
   -webkit-#{$prop}: #{$val};
@@ -35,7 +35,7 @@ $page-banner-should-show-top-nav:       true          !default;
 
     // Grab the alias and the condition from their respective locations in
     // the list.
-    $alias:     nth($breakpoint, 1);
+    $alias: nth($breakpoint, 1);
     $condition: nth($breakpoint, 2);
 
     // If the media query we’ve specified has an alias and a condition...
@@ -54,21 +54,20 @@ $page-banner-should-show-top-nav:       true          !default;
   }
 
   // If the user specifies a non-exitent alias, send them a warning.
-  @if $breakpoint-found == false{
+  @if $breakpoint-found == false {
     @warn "Oops! Breakpoint ‘#{$mq}’ does not exist."
   }
 
 }
 
-.page-banner-container {
-  position: absolute;
+.page-banner__container {
+  position: relative;
   width: 100%;
-  left: 0;
   top: 0;
   z-index: 1;
 }
 
-.page-banner-container--fixed{
+.page-banner__container--fixed {
   position: fixed;
   @include page-banner-vendor(transform, translateZ(1px));
   top: 0 !important;
@@ -102,11 +101,6 @@ $page-banner-should-show-top-nav:       true          !default;
   padding: 15px 50px;
 }
 
-.page-banner__shim {
-  height: 0;
-  @include page-banner-vendor(transition, height $page-banner-duration-animation-length ease);
-}
-
 .page-banner__close {
   position: absolute;
   right: 24px;
@@ -128,12 +122,6 @@ $page-banner-should-show-top-nav:       true          !default;
   width: 19px;
   height: 19px;
   background-repeat: no-repeat;
-}
-
-.page-banner--fixed {
-  position: fixed;
-  @include page-banner-vendor(transform, translateZ(1px));
-  top: 0 !important;
 }
 
 .page-banner--success {

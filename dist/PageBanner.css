@@ -1,11 +1,10 @@
-.page-banner-container {
-  position: absolute;
+.page-banner__container {
+  position: relative;
   width: 100%;
-  left: 0;
   top: 0;
   z-index: 1; }
 
-.page-banner-container--fixed {
+.page-banner__container--fixed {
   position: fixed;
   -webkit-transform: translateZ(1px);
   -ms-transform: translateZ(1px);
@@ -39,14 +38,6 @@
   text-align: center;
   padding: 15px 50px; }
 
-.page-banner__shim {
-  height: 0;
-  -webkit-transition: height 300ms ease;
-  -ms-transition: height 300ms ease;
-  -moz-transition: height 300ms ease;
-  -o-transition: height 300ms ease;
-  transition: height 300ms ease; }
-
 .page-banner__close {
   position: absolute;
   right: 24px;
@@ -66,15 +57,6 @@
   width: 19px;
   height: 19px;
   background-repeat: no-repeat; }
-
-.page-banner--fixed {
-  position: fixed;
-  -webkit-transform: translateZ(1px);
-  -ms-transform: translateZ(1px);
-  -moz-transform: translateZ(1px);
-  -o-transform: translateZ(1px);
-  transform: translateZ(1px);
-  top: 0 !important; }
 
 .page-banner--success .page-banner__body {
   background: #8CC237;

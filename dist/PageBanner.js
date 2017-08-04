@@ -36,8 +36,7 @@ exports.default = _react2.default.createClass({
     return {
       pageMessages: (0, _immutable.List)(),
       triggerClose: 0,
-      triggerOpen: 0,
-      hideShim: false
+      triggerOpen: 0
     };
   },
   getInitialState: function getInitialState() {
@@ -74,28 +73,16 @@ exports.default = _react2.default.createClass({
     var bannerContainer = this.pageBannerContainer;
 
     if (bannerContainer) {
-      this._toggleShimHeight(bannerContainer);
+      if (this.waypoint) return;
       this.waypoint = new Waypoint({
         element: this.pageBannerContainer,
-        handler: function (direction) {
-          this._handleWaypoint(direction);
-        }.bind(this)
+        handler: this._handleWaypoint
       });
     }
   },
   _handleWaypoint: function _handleWaypoint(direction) {
     var isFixed = direction === 'down';
     this.setState({ isFixed: isFixed });
-  },
-  _toggleShimHeight: function _toggleShimHeight(bannerContainer) {
-    var pageBanners = bannerContainer.getElementsByClassName('page-banner__body');
-
-    var shimHeight = 0;
-    Array.from(pageBanners).forEach(function (children) {
-      shimHeight += children.scrollHeight;
-    });
-
-    this.pageBannerShim.style.height = shimHeight + 'px';
   },
   render: function render() {
     var _this = this;
@@ -108,33 +95,15 @@ exports.default = _react2.default.createClass({
 
     return _react2.default.createElement(
       'div',
-      null,
-      _react2.default.createElement(
-        'div',
-        {
-          'aria-hidden': ariaHidden,
-          className: (0, _classnames2.default)('page-banner-container', { 'page-banner-container--fixed': isFixed }),
-          ref: function ref(pageBannerContainer) {
-            _this.pageBannerContainer = pageBannerContainer;
-          }
-        },
-        isShowing ? this.renderPageBanner() : null
-      ),
-      this.renderShim()
-    );
-  },
-  renderShim: function renderShim() {
-    var _this2 = this;
-
-    var hideShim = this.props.hideShim;
-
-
-    return hideShim ? null : _react2.default.createElement('div', {
-      ref: function ref(bannerShim) {
-        _this2.pageBannerShim = bannerShim;
+      {
+        'aria-hidden': ariaHidden,
+        className: (0, _classnames2.default)('page-banner__container', { 'page-banner__container--fixed': isFixed }),
+        ref: function ref(pageBannerContainer) {
+          _this.pageBannerContainer = pageBannerContainer;
+        }
       },
-      className: 'page-banner__shim'
-    });
+      isShowing ? this.renderPageBanner() : null
+    );
   },
   renderPageBanner: function renderPageBanner() {
     var _props2 = this.props,
