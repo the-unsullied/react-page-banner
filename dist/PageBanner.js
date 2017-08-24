@@ -29,14 +29,18 @@ exports.default = _react2.default.createClass({
   propTypes: {
     pageMessages: _react2.default.PropTypes.object,
     triggerClose: _react2.default.PropTypes.number,
-    triggerOpen: _react2.default.PropTypes.number
+    triggerOpen: _react2.default.PropTypes.number,
+    onBannerClose: _react2.default.PropTypes.func,
+    isStatic: _react2.default.PropTypes.bool
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
       pageMessages: (0, _immutable.List)(),
       triggerClose: 0,
-      triggerOpen: 0
+      triggerOpen: 0,
+      onBannerClose: function onBannerClose() {},
+      isStatic: false
     };
   },
   getInitialState: function getInitialState() {
@@ -45,6 +49,17 @@ exports.default = _react2.default.createClass({
       isFixed: false,
       ariaHidden: true
     };
+  },
+  componentWillMount: function componentWillMount() {
+    var isStatic = this.props.isStatic;
+
+
+    if (isStatic) {
+      this.setState({
+        isShowing: true,
+        ariaHidden: false
+      });
+    }
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
     var _props = this.props,
@@ -67,9 +82,15 @@ exports.default = _react2.default.createClass({
     }
   },
   componentWillUnmount: function componentWillUnmount() {
-    this.waypoint.destroy();
+    if (this.waypoint) {
+      this.waypoint.destroy();
+    }
   },
   componentDidUpdate: function componentDidUpdate() {
+    var isStatic = this.props.isStatic;
+
+    if (isStatic) return;
+
     var bannerContainer = this.pageBannerContainer;
 
     if (bannerContainer) {
@@ -102,27 +123,45 @@ exports.default = _react2.default.createClass({
           _this.pageBannerContainer = pageBannerContainer;
         }
       },
-      isShowing ? this.renderPageBanner() : null
+      isShowing ? this.getPageBanners() : null
     );
   },
-  renderPageBanner: function renderPageBanner() {
+  getPageBanners: function getPageBanners() {
     var _props2 = this.props,
+        afterClose = _props2.afterClose,
+        closeIconClass = _props2.closeIconClass,
+        duration = _props2.duration,
+        message = _props2.message,
         pageMessages = _props2.pageMessages,
-        onBannerClose = _props2.onBannerClose;
+        type = _props2.type;
+
+    var messages = pageMessages;
+
+    if (pageMessages.isEmpty()) {
+      messages = (0, _immutable.fromJS)([{ afterClose: afterClose, closeIconClass: closeIconClass, duration: duration, message: message, type: type }]);
+    }
+
+    return this.renderPageBanners(messages);
+  },
+  renderPageBanners: function renderPageBanners(pageMessages) {
+    var _props3 = this.props,
+        onBannerClose = _props3.onBannerClose,
+        isStatic = _props3.isStatic;
 
 
     return pageMessages.map(function (pageMessage, index) {
-      if (pageMessage === null) return;
+      if (!pageMessage) return;
 
       return _react2.default.createElement(_BabyBanner2.default, {
         key: index,
-        bannerId: index,
-        message: pageMessage.get('message'),
-        closeIconClass: 'icon-close',
-        type: pageMessage.get('type'),
-        duration: pageMessage.get('duration'),
         afterClose: pageMessage.get('afterClose'),
-        onBannerClose: onBannerClose
+        bannerId: index,
+        closeIconClass: pageMessage.get('closeIconClass'),
+        duration: pageMessage.get('duration'),
+        message: pageMessage.get('message'),
+        onBannerClose: onBannerClose,
+        type: pageMessage.get('type'),
+        isStatic: isStatic
       });
     });
   }

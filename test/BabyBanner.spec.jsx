@@ -14,7 +14,7 @@ const createComponent = function(props = {}) {
     message: '',
     roleCloseIcon: 'button',
     roleMessage: null,
-    sticky: false,
+    isStatic: false,
     tabIndexBody: '-1',
     topOffset: null,
     topPalmOffset: null,
@@ -35,8 +35,15 @@ context('BabyBanner', () => {
       expect(wrapper.find('div.page-banner')).to.have.length(1);
       expect(wrapper.find('div.page-banner__body')).to.have.length(1);
       expect(wrapper.find('div.page-banner__close')).to.have.length(1);
-      expect(wrapper.text()).to.equals('This is BabyBanner test')
     });
 
+    it('should not show BabyBanner is message is emptt', () => {
+      const wrapper = createComponent();
+      wrapper.setProps({ message: "", type: 'error'});
+
+      expect(wrapper.find('div.page-banner')).to.have.length(0);
+      expect(wrapper.find('div.page-banner__body')).to.have.length(0);
+      expect(wrapper.find('div.page-banner__close')).to.have.length(0);
+    });
   });
 });

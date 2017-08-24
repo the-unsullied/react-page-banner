@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 
 import BabyBanner from './BabyBanner';
 
@@ -14,7 +14,9 @@ export default React.createClass({
   propTypes: {
     pageMessages: React.PropTypes.object,
     triggerClose: React.PropTypes.number,
-    triggerOpen: React.PropTypes.number
+    triggerOpen: React.PropTypes.number,
+    onBannerClose: React.PropTypes.func,
+    isStatic: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -22,6 +24,8 @@ export default React.createClass({
       pageMessages: List(),
       triggerClose: 0,
       triggerOpen: 0,
+      onBannerClose: () => {},
+      isStatic: false
     };
   },
 
@@ -31,6 +35,17 @@ export default React.createClass({
       isFixed: false,
       ariaHidden: true
     };
+  },
+
+  componentWillMount() {
+    const { isStatic } = this.props;
+
+    if (isStatic) {
+      this.setState({
+        isShowing: true,
+        ariaHidden: false
+      });
+    }
   },
 
   componentWillReceiveProps(nextProps) {
@@ -52,10 +67,15 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    this.waypoint.destroy();
+    if (this.waypoint) {
+      this.waypoint.destroy();
+    }
   },
 
   componentDidUpdate() {
+    const { isStatic } = this.props;
+    if (isStatic) return;
+
     const bannerContainer = this.pageBannerContainer;
 
     if (bannerContainer) {
@@ -84,27 +104,38 @@ export default React.createClass({
           this.pageBannerContainer = pageBannerContainer;
         }}
       >
-        { isShowing ? this.renderPageBanner() : null }
+        { isShowing ? this.getPageBanners() : null }
       </div>);
   },
 
-  renderPageBanner() {
-    const { pageMessages, onBannerClose } = this.props;
+  getPageBanners() {
+    const { afterClose, closeIconClass, duration, message, pageMessages, type } = this.props;
+    let messages = pageMessages;
+
+    if (pageMessages.isEmpty()) {
+      messages = fromJS([{ afterClose, closeIconClass, duration, message, type }]);
+    }
+
+    return this.renderPageBanners(messages);
+  },
+
+  renderPageBanners(pageMessages) {
+    const { onBannerClose, isStatic } = this.props;
 
     return pageMessages.map((pageMessage, index) => {
-      if (pageMessage === null) return;
+      if (!pageMessage) return;
 
       return (<BabyBanner
         key={index}
-        bannerId={index}
-        message={pageMessage.get('message')}
-        closeIconClass='icon-close'
-        type={pageMessage.get('type')}
-        duration={pageMessage.get('duration')}
         afterClose={pageMessage.get('afterClose')}
+        bannerId={index}
+        closeIconClass={pageMessage.get('closeIconClass')}
+        duration={pageMessage.get('duration')}
+        message={pageMessage.get('message')}
         onBannerClose={onBannerClose}
+        type={pageMessage.get('type')}
+        isStatic={isStatic}
       />);
     });
   }
-
 });

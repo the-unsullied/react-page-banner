@@ -34,7 +34,7 @@ exports.default = _react2.default.createClass({
     onKeyUpCloseIcon: _react2.default.PropTypes.func,
     roleCloseIcon: _react2.default.PropTypes.string,
     roleMessage: _react2.default.PropTypes.string,
-    sticky: _react2.default.PropTypes.bool,
+    isStatic: _react2.default.PropTypes.bool,
     tabIndexBody: _react2.default.PropTypes.string,
     tabIndexCloseIcon: _react2.default.PropTypes.func,
     topOffset: _react2.default.PropTypes.string,
@@ -48,14 +48,14 @@ exports.default = _react2.default.createClass({
       ariaLabelCloseIcon: 'Close Icon',
       ariaLiveMessage: 'off',
       bannerId: 0,
-      closeIconClass: '',
+      closeIconClass: 'icon-close',
       duration: 3000,
       message: '',
       onBannerClose: function onBannerClose() {},
       onKeyUpCloseIcon: function onKeyUpCloseIcon() {},
       roleCloseIcon: 'button',
       roleMessage: null,
-      sticky: false,
+      isStatic: false,
       tabIndexBody: '-1',
       tabIndexCloseIcon: function tabIndexCloseIcon() {
         return '-1';
@@ -85,14 +85,14 @@ exports.default = _react2.default.createClass({
   _open: function _open() {
     var _props = this.props,
         duration = _props.duration,
-        sticky = _props.sticky,
+        isStatic = _props.isStatic,
         tabIndexCloseIcon = _props.tabIndexCloseIcon;
 
 
     this.setState({ isShowing: true });
     this._toggleHeight(true);
 
-    if (sticky) {
+    if (isStatic) {
       return;
     }
 
@@ -136,7 +136,10 @@ exports.default = _react2.default.createClass({
         _this.setState({ tabIndexCloseIcon: '-1' });
         afterClose(bannerId);
       }
-      onBannerClose(bannerId);
+
+      if (typeof onBannerClose === 'function') {
+        onBannerClose(bannerId);
+      }
       // should match animation length
     }, 300);
   },
@@ -155,8 +158,9 @@ exports.default = _react2.default.createClass({
         roleMessage = _props3.roleMessage,
         tabIndexBody = _props3.tabIndexBody;
 
-
     var pageBannerClasses = (0, _classnames2.default)('page-banner', 'page-banner--' + type);
+
+    if (!message) return null;
 
     return _react2.default.createElement(
       'div',
@@ -175,14 +179,11 @@ exports.default = _react2.default.createClass({
             _this2.pageBannerBody = bannerBody;
           }
         },
-        _react2.default.createElement(
-          'span',
-          {
-            'aria-live': ariaLiveMessage,
-            role: roleMessage
-          },
-          message
-        ),
+        _react2.default.createElement('span', {
+          'aria-live': ariaLiveMessage,
+          role: roleMessage,
+          dangerouslySetInnerHTML: { __html: message }
+        }),
         _react2.default.createElement(
           'div',
           { className: 'page-banner__close' },

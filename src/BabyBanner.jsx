@@ -21,7 +21,7 @@ export default React.createClass({
     onKeyUpCloseIcon: React.PropTypes.func,
     roleCloseIcon: React.PropTypes.string,
     roleMessage: React.PropTypes.string,
-    sticky: React.PropTypes.bool,
+    isStatic: React.PropTypes.bool,
     tabIndexBody: React.PropTypes.string,
     tabIndexCloseIcon: React.PropTypes.func,
     topOffset: React.PropTypes.string,
@@ -35,14 +35,14 @@ export default React.createClass({
       ariaLabelCloseIcon: 'Close Icon',
       ariaLiveMessage: 'off',
       bannerId: 0,
-      closeIconClass: '',
+      closeIconClass: 'icon-close',
       duration: 3000,
       message: '',
       onBannerClose: () => {},
       onKeyUpCloseIcon: () => {},
       roleCloseIcon: 'button',
       roleMessage: null,
-      sticky: false,
+      isStatic: false,
       tabIndexBody: '-1',
       tabIndexCloseIcon: () => '-1',
       topOffset: null,
@@ -71,12 +71,12 @@ export default React.createClass({
   },
 
   _open() {
-    const { duration, sticky, tabIndexCloseIcon } = this.props;
+    const { duration, isStatic, tabIndexCloseIcon } = this.props;
 
     this.setState({ isShowing: true });
     this._toggleHeight(true);
 
-    if (sticky) {
+    if (isStatic) {
       return;
     }
 
@@ -117,7 +117,10 @@ export default React.createClass({
         this.setState({ tabIndexCloseIcon: '-1' });
         afterClose(bannerId);
       }
-      onBannerClose(bannerId);
+
+      if (typeof onBannerClose === 'function') {
+        onBannerClose(bannerId);
+      }
       // should match animation length
     }, 300);
   },
@@ -135,8 +138,9 @@ export default React.createClass({
       roleMessage,
       tabIndexBody
     } = this.props;
-
     const pageBannerClasses = classnames('page-banner', `page-banner--${type}`);
+
+    if (!message) return null;
 
     return (
       <div
@@ -155,9 +159,8 @@ export default React.createClass({
           <span
             aria-live={ariaLiveMessage}
             role={roleMessage}
-          >
-            { message }
-          </span>
+            dangerouslySetInnerHTML={{ __html: message }}
+          />
           <div className='page-banner__close'>
             <i
               className={`page-banner__icon-close ${closeIconClass}`}
