@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import classnames from 'classnames';
 import { List, fromJS } from 'immutable';
@@ -7,35 +8,32 @@ import BabyBanner from './BabyBanner';
 import './waypoints';
 
 
-export default React.createClass({
-  displayName: 'PageBanner',
-  waypoint: null,
+export default class extends React.Component {
+  static displayName = 'PageBanner';
 
-  propTypes: {
-    pageMessages: React.PropTypes.object,
-    triggerClose: React.PropTypes.number,
-    triggerOpen: React.PropTypes.number,
-    onBannerClose: React.PropTypes.func,
-    isStatic: React.PropTypes.bool
-  },
+  static propTypes = {
+    pageMessages: PropTypes.object,
+    triggerClose: PropTypes.number,
+    triggerOpen: PropTypes.number,
+    onBannerClose: PropTypes.func,
+    isStatic: PropTypes.bool
+  };
 
-  getDefaultProps() {
-    return {
-      pageMessages: List(),
-      triggerClose: 0,
-      triggerOpen: 0,
-      onBannerClose: () => {},
-      isStatic: false
-    };
-  },
+  static defaultProps = {
+    pageMessages: List(),
+    triggerClose: 0,
+    triggerOpen: 0,
+    onBannerClose: () => {},
+    isStatic: false
+  };
 
-  getInitialState() {
-    return {
-      isShowing: false,
-      isFixed: false,
-      ariaHidden: true
-    };
-  },
+  state = {
+    isShowing: false,
+    isFixed: false,
+    ariaHidden: true
+  };
+
+  waypoint = null;
 
   componentWillMount() {
     const { isStatic } = this.props;
@@ -46,7 +44,7 @@ export default React.createClass({
         ariaHidden: false
       });
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     const { triggerClose, triggerOpen } = this.props;
@@ -64,13 +62,13 @@ export default React.createClass({
         ariaHidden: true
       });
     }
-  },
+  }
 
   componentWillUnmount() {
     if (this.waypoint) {
       this.waypoint.destroy();
     }
-  },
+  }
 
   componentDidUpdate() {
     const { isStatic } = this.props;
@@ -85,13 +83,12 @@ export default React.createClass({
         handler: this._handleWaypoint
       });
     }
-  },
+  }
 
-
-  _handleWaypoint(direction) {
+  _handleWaypoint = (direction) => {
     const isFixed = direction === 'down';
     this.setState({ isFixed });
-  },
+  };
 
   render() {
     const { ariaHidden, isFixed, isShowing } = this.state;
@@ -106,9 +103,9 @@ export default React.createClass({
       >
         { isShowing ? this.getPageBanners() : null }
       </div>);
-  },
+  }
 
-  getPageBanners() {
+  getPageBanners = () => {
     const { afterClose, closeIconClass, duration, message, pageMessages, type } = this.props;
     let messages = pageMessages;
 
@@ -117,9 +114,9 @@ export default React.createClass({
     }
 
     return this.renderPageBanners(messages);
-  },
+  };
 
-  renderPageBanners(pageMessages) {
+  renderPageBanners = (pageMessages) => {
     const { onBannerClose, isStatic } = this.props;
 
     return pageMessages.map((pageMessage, index) => {
@@ -137,5 +134,5 @@ export default React.createClass({
         isStatic={isStatic}
       />);
     });
-  }
-});
+  };
+}

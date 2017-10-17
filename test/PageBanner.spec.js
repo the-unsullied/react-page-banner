@@ -1,10 +1,11 @@
 import React from 'react';
 import PageBanner from './../dist/PageBanner';
-import {shallow} from 'enzyme';
-import {fromJS, List} from 'immutable'
+import {shallow, mount} from 'enzyme';
+import {fromJS, List} from 'immutable';
+import BabyBanner from './../dist/PageBanner';
 const noop = () => {
 };
-const createComponent = function (props = {}) {
+const createComponent = function (props = {}, shouldMount = false) {
 
   const updatedProps = Object.assign({
     pageMessages: List(),
@@ -13,6 +14,11 @@ const createComponent = function (props = {}) {
     triggerClose: 0
   }, props);
 
+  if(shouldMount) {
+    return mount(
+      <PageBanner {...updatedProps} />
+    );
+  }
   return shallow(
     <PageBanner {...updatedProps} />
   );
@@ -39,7 +45,7 @@ context('PageBanner', () => {
 
   describe('render', () => {
     it('should render pageBanner container with one BabyPageBanner', () => {
-      const wrapper = createComponent();
+      const wrapper = createComponent({}, true);
       wrapper.setProps({
         triggerOpen: 1,
         pageMessages: fromJS([{message: 'Page Banner 1', type: 'success', duration: 0}])
@@ -50,7 +56,7 @@ context('PageBanner', () => {
     });
 
     it('should render pageBanner container with multiple BabyPageBanners', () => {
-      const wrapper = createComponent();
+      const wrapper = createComponent({}, true);
       wrapper.setProps({
         triggerOpen: 1,
         pageMessages: fromJS([{message: 'Page Banner 1', type: 'success', duration: 0},
@@ -65,7 +71,7 @@ context('PageBanner', () => {
   });
 
   it('should render one pageBanner if we pass single banner props', () => {
-    const wrapper = createComponent();
+    const wrapper = createComponent({}, true);
     wrapper.setProps({
       triggerOpen: 1,
       message: 'Page Banner 2',

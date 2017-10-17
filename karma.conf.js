@@ -16,7 +16,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'test/**/*.spec.jsx'
+      'test/setupTest.js',
+      'test/**/*.spec.js'
     ],
 
 
@@ -78,7 +79,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: [config.debug ? 'Chrome' : 'PhantomJS'],
+    browsers: [config.debug ? 'Chrome' : 'Chrome_headless'],
 
 
     // Continuous Integration mode
@@ -91,6 +92,17 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-chai-sinon',
       'karma-browserify'
-    ]
+    ],
+
+    customLaunchers: {
+      Chrome_headless: {
+        base: 'Chrome',
+        flags: [
+          '--headless',
+          '--disable-gpu',
+          '--remote-debugging-port=9222'
+        ]
+      }
+    }
   })
 }

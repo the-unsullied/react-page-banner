@@ -1,5 +1,8 @@
 # react-page-banner
 
+```
+NOTE: v3.0.x is using React v16 and ReactDom v16 and ES6 Class syntax. If using older version of React, please use latest previous version v2.0.8.
+```
 *A full width page banner that acts as a notification to the user. When shown banner will absolutely slide below the parent element, and disappear after a certain duration.*
 
 ![React Page Banner](https://github.com/the-unsullied/react-page-banner/blob/demo/page-banner-demo.gif)

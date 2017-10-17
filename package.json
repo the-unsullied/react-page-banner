@@ -1,6 +1,6 @@
 {
   "name": "react-page-banner",
-  "version": "2.0.8",
+  "version": "3.0.0",
   "description": "A notification banner that absolutely slides below parent element.",
   "main": "./dist/PageBanner.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/the-unsullied/react-page-banner"
   },
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && babel src/PageBanner.jsx --out-file dist/PageBanner.js &&  babel src/BabyBanner.jsx --out-file dist/BabyBanner.js  && cp node_modules/waypoints/lib/noframework.waypoints.min.js dist/waypoints.js && cp src/page-banner-close.svg dist/page-banner-close.svg && node ./scripts/build-dist && cp src/main.scss dist/PageBanner.scss && node ./scripts/build-dist",
+    "build": "rm -rf dist && mkdir -p dist && babel src/PageBanner.js --out-file dist/PageBanner.js &&  babel src/BabyBanner.js --out-file dist/BabyBanner.js  && cp node_modules/waypoints/lib/noframework.waypoints.min.js dist/waypoints.js && cp src/page-banner-close.svg dist/page-banner-close.svg && node ./scripts/build-dist && cp src/main.scss dist/PageBanner.scss && node ./scripts/build-dist",
     "test": "npm run build; ./node_modules/karma/bin/karma start",
     "test:debug": "npm run build; ./node_modules/karma/bin/karma start --debug=true"
   },
@@ -44,9 +44,9 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "mocha": "^2.5.3",
     "node-sass": "^3.4.2",
-    "react": "^15.3.0",
-    "react-addons-test-utils": "^15.4.1",
-    "react-dom": "^15.3.0",
+    "react": "^16.0.0-rc.3",
+    "react-addons-test-utils": "^15.1.0",
+    "react-dom": "^16.0.0-rc.3",
     "react-intl": "^2.0.1",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
@@ -55,7 +55,10 @@
   },
   "dependencies": {
     "babel-preset-airbnb": "^2.3.2",
-    "enzyme": "2.8.0",
-    "immutable": "^3.8.1"
+    "babel-preset-stage-0": "^6.24.1",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.2",
+    "immutable": "^3.8.2",
+    "prop-types": "^15.6.0"
   }
 }

@@ -3,74 +3,72 @@
  to set shim, make sure that <BabyBanner /> is at the top of your page.
  */
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import classnames from 'classnames';
 
-export default React.createClass({
-  displayName: 'BabyBanner',
+class BabyBanner extends React.Component {
+  static displayName = 'BabyBanner';
 
-  propTypes: {
-    afterClose: React.PropTypes.func,
-    ariaLabelCloseIcon: React.PropTypes.any,
-    ariaLiveMessage: React.PropTypes.string,
-    bannerId: React.PropTypes.number,
-    closeIconClass: React.PropTypes.string,
-    duration: React.PropTypes.number,
-    message: React.PropTypes.any,
-    onBannerClose: React.PropTypes.func,
-    onKeyUpCloseIcon: React.PropTypes.func,
-    roleCloseIcon: React.PropTypes.string,
-    roleMessage: React.PropTypes.string,
-    isStatic: React.PropTypes.bool,
-    tabIndexBody: React.PropTypes.string,
-    tabIndexCloseIcon: React.PropTypes.func,
-    topOffset: React.PropTypes.string,
-    topPalmOffset: React.PropTypes.string,
-    type: React.PropTypes.string
-  },
+  static propTypes = {
+    afterClose: PropTypes.func,
+    ariaLabelCloseIcon: PropTypes.any,
+    ariaLiveMessage: PropTypes.string,
+    bannerId: PropTypes.number,
+    closeIconClass: PropTypes.string,
+    duration: PropTypes.number,
+    message: PropTypes.any,
+    onBannerClose: PropTypes.func,
+    onKeyUpCloseIcon: PropTypes.func,
+    roleCloseIcon: PropTypes.string,
+    roleMessage: PropTypes.string,
+    isStatic: PropTypes.bool,
+    tabIndexBody: PropTypes.string,
+    tabIndexCloseIcon: PropTypes.func,
+    topOffset: PropTypes.string,
+    topPalmOffset: PropTypes.string,
+    type: PropTypes.string
+  };
 
-  getDefaultProps() {
-    return {
-      afterClose: () => {},
-      ariaLabelCloseIcon: 'Close Icon',
-      ariaLiveMessage: 'off',
-      bannerId: 0,
-      closeIconClass: 'icon-close',
-      duration: 3000,
-      message: '',
-      onBannerClose: () => {},
-      onKeyUpCloseIcon: () => {},
-      roleCloseIcon: 'button',
-      roleMessage: null,
-      isStatic: false,
-      tabIndexBody: '-1',
-      tabIndexCloseIcon: () => '-1',
-      topOffset: null,
-      topPalmOffset: null,
-      type: 'success'
-    };
-  },
+  static defaultProps = {
+    afterClose: () => {},
+    ariaLabelCloseIcon: 'Close Icon',
+    ariaLiveMessage: 'off',
+    bannerId: 0,
+    closeIconClass: 'icon-close',
+    duration: 3000,
+    message: '',
+    onBannerClose: () => {},
+    onKeyUpCloseIcon: () => {},
+    roleCloseIcon: 'button',
+    roleMessage: null,
+    isStatic: false,
+    tabIndexBody: '-1',
+    tabIndexCloseIcon: () => '-1',
+    topOffset: null,
+    topPalmOffset: null,
+    type: 'success'
+  };
 
-  getInitialState() {
-    return {
-      closePageBannerTimer: null,
-      isShowing: false,
-      tabIndexCloseIcon: '-1'
-    };
-  },
+  state = {
+    closePageBannerTimer: null,
+    isShowing: false,
+    tabIndexCloseIcon: '-1'
+  };
 
   componentWillMount() {
     this._slideOpen();
-  },
+  }
 
   componentWillUnmount() {
     const { closePageBannerTimer } = this.state;
     if (closePageBannerTimer) {
       clearTimeout(closePageBannerTimer);
     }
-  },
+  }
 
-  _open() {
+  _open = () => {
     const { duration, isStatic, tabIndexCloseIcon } = this.props;
 
     this.setState({ isShowing: true });
@@ -84,9 +82,9 @@ export default React.createClass({
       tabIndexCloseIcon: tabIndexCloseIcon(true),
       closePageBannerTimer: setTimeout(this._close, duration)
     });
-  },
+  };
 
-  _toggleHeight(isShowing) {
+  _toggleHeight = (isShowing) => {
     const pageBanner = this.pageBanner;
 
     if (pageBanner) {
@@ -95,15 +93,15 @@ export default React.createClass({
 
       pageBanner.style.height = `${height}px`;
     }
-  },
+  };
 
-  _slideOpen() {
+  _slideOpen = () => {
     // for css animation, move to bottom of call stack
     const closePageBannerTimer = setTimeout(this._open);
     this.setState({ closePageBannerTimer });
-  },
+  };
 
-  _close() {
+  _close = () => {
     const { afterClose, bannerId, onBannerClose } = this.props;
 
     this.setState({ isShowing: false });
@@ -123,7 +121,7 @@ export default React.createClass({
       }
       // should match animation length
     }, 300);
-  },
+  };
 
   render() {
     const { tabIndexCloseIcon } = this.state;
@@ -174,4 +172,6 @@ export default React.createClass({
         </div>
       </div>);
   }
-});
+}
+
+export default BabyBanner;
